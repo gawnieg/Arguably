@@ -12,28 +12,51 @@
     </header>
 
     <main>
-        <div class="row">
-            <div class="col-sm-8">
-            
-                <div class="jumbotron">
-                    <h1>This is STILL great</h1>
-                    <p>Welcome to MORE templating using EJS</p>
-                </div>
-                
-            </div>
-            <div class="col-sm-4">
-                
-                <div class="well">
-                    <h3>Look I'm ANOTHER Sidebar!</h3>
-                </div>
+        <div class="jumbotron">
+            <h1>Annotation Page</h1>
+            <p>Choose the relationship between the displayed opinions.</p>
 
-            </div>
+
+
+
+            <h2> Opinions: </h2>
+            <ul>
+            <% movies.forEach(function(movie){ %>
+              <li> <%= movie.title %> </li>
+            <% }) %>
+            </ul>
+
+
+
+
+
+
+<form method = "post" action ="/opinion/addrelationship">
+  <label> Select relationship </label>
+
+<select name = "select">
+<option value = "ATTACKS"> Attacks </option>
+<option value = "SUPPORTS"> Supports </option>
+<option value = "UNRELATED" selected> Unrelated </option>
+</select>
+<br>
+
+    <input type = "submit" value="Submit">
+
+</form>
+
+
+
+
+
+
         </div>
     </main>
 
     <footer>
         <% include ../partials/footer %>
     </footer>
-    
+
+
 </body>
 </html>

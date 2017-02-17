@@ -15,15 +15,15 @@
         <div class="jumbotron">
             <h1>Arguably</h1>
             <p>Welcome to templating using EJS</p>
-	
 
 
-		
 
 
-<form method = "post" action ="/movie/add">
-  <label> Movie Name </label>
-  <input type="text" name = "title" placeholder="Movie Name" style = "height: 120px; width:400px">
+
+
+<form method = "post" action ="/opinion/add">
+  <label> Your Argument </label>
+  <input type="text" name = "argumenttext" placeholder="Your Argument" style = "height: 120px; width:400px">
   <br>
 
 <select name = "select">
@@ -31,8 +31,8 @@
 <option value = "value2" selected> Not Related To </option>
 </select>
 <br>
-  <label> Movie Year</label>
-  <input type="text" name = "year" placeholder = "Movie Year" style = "height:120px; width:400px">
+  <label> Argument Topic</label>
+  <input type="text" name = "topic" placeholder = "Argument Topic" style = "height:120px; width:400px">
     <br>
     <input type = "submit" value="Submit">
 
@@ -40,29 +40,9 @@
 	
 
 
-<!--
-
-			
-			
-			
-			<h2>Variable</h2>
-			<p><%= tagline %></p>
-			<p><%= somethingelse %></p>
-			
-			<h2>Loop</h2>
-			<ul>
-				<% drinks.forEach(function(drink) { %>
-				<li><%= drink.name %> - <%= drink.drunkness %></li>
-				<% }); %>
-			</ul>
-
--->
 
 
-
-			
-
-<h2> Movies </h2>
+<h2> Opinions </h2>
 <ul>
 <% movies.forEach(function(movie){ %>
   <li> <%= movie.title %> </li>
@@ -71,15 +51,15 @@
 
 
 
-			
-			
+
+
         </div>
     </main>
 
     <footer>
         <% include ../partials/footer %>
     </footer>
-    
-	
+
+
 </body>
 </html>
