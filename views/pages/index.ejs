@@ -19,36 +19,34 @@
 
 
 
+            <h2> Opinions (Later, make this a distinct topics list and make the names links to topic pages) </h2>
+            <ul>
+            <% movies.forEach(function(movie){ %>
+              <li> <%= movie.title %> </li>
+            <% }) %>
+            </ul>
+
+
+
+
 
 
 <form method = "post" action ="/opinion/add">
-  <label> Your Argument </label>
-  <input type="text" name = "argumenttext" placeholder="Your Argument" style = "height: 120px; width:400px">
+  <label> Initial Argument </label>
+  <input type="text" name = "argumenttext" placeholder="Your Argument here" style = "height: 120px; width:400px">
   <br>
 
-<select name = "select">
+<!--  <select name = "select">
 <option value = "value1"> Attacks </option>
 <option value = "value2" selected> Not Related To </option>
 </select>
-<br>
-  <label> Argument Topic</label>
-  <input type="text" name = "topic" placeholder = "Argument Topic" style = "height:120px; width:400px">
+<br>  -->
+  <label> (New?) Topic</label>
+  <input type="text" name = "topic" placeholder = "Your Topic here" style = "height:120px; width:400px">
     <br>
     <input type = "submit" value="Submit">
 
 </form>
-	
-
-
-
-
-<h2> Opinions </h2>
-<ul>
-<% movies.forEach(function(movie){ %>
-  <li> <%= movie.title %> </li>
-<% }) %>
-</ul>
-
 
 
 
