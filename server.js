@@ -8,11 +8,9 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var neo4j = require('neo4j-driver').v1;
 
-
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 app.set('views',path.join(__dirname,'views'));
-
 
 //standard middleware
 app.use(logger('dev'));
@@ -26,42 +24,40 @@ var session = driver.session();
 
 
 
+
+
+//INSIDE +'s: SECTION FOR "DECLARING" PAGES. ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 // index page -----------------------------------------------------------------
 app.get('/',function(req,res){
 
  var tagline = "Any code of your own that you haven't looked at for six or more months might as w";
         var somethingelse = "THIS IS ANOTHER VARIABLE";
 
-
-  //res.send('Hello World');
   session
     .run('MATCH(n:Opinion) RETURN n LIMIT 100')
     .then(function(result){
-        var movieArr =[];
+        var topicArray =[];
           result.records.forEach(function(record){
-            movieArr.push({
+            topicArray.push({
               id: record._fields[0].identity.low,
-              title: record._fields[0].properties.argumenttext,
-              year: record._fields[0].properties.topic
-
+              argumenttext: record._fields[0].properties.argumenttext,
+              topic: record._fields[0].properties.topic
             });
-            //console.log(record._fields[0].properties);
+			
           });
           res.render('pages/index',{
         tagline: tagline,
         somethingelse: somethingelse,
-	 movies: movieArr
+	 topics: topicArray
           });
         })
-
 
     .catch(function(err){
       console.log(err);
     });
-});//end of app.get
+});
 // End of index page section --------------------------------------------------
-
-
 
 
 //Topic page ------------------------------------------------------------------
@@ -71,37 +67,32 @@ app.get('/topic', function(req, res) {
 //End of about page section ---------------------------------------------------
 
 
-
-var movieArrformore =[];//NOW GLOBAL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Annotate page ------------------------------------------------------------------
+var annotateArray =[];//Globally declared to be accesible to a function lower down.
 app.get('/annotate',function(req,res){
 
  var tagline = "Any code of your own that you haven't looked at for six or more months might as w";
-        var somethingelse = "THIS IS ANOTHER VARIABLE";
+ var somethingelse = "THIS IS ANOTHER VARIABLE";
 
-
-  //res.send(stuff...........);
   session
-    //.run('MATCH(n:Movie) RETURN n LIMIT 100')
-      //.run('MATCH (node1:Opinion)-[:SUPPORTS]-(node2:Opinion) WITH node1,count(node2) as rels RETURN node1 ORDER BY rels ASC LIMIT 2')
 	  .run('MATCH (node1:Opinion)-[]-(node2:Opinion) WITH node1,count(node2) as rels RETURN node1 ORDER BY rels ASC LIMIT 2')
 
     .then(function(result){
-        //var movieArrformore =[];
-        movieArrformore =[];//NOW GLOBAL!!!!!!!!!!!!!!!!!!!!!!
+        //var annotateArray =[]; //If don't want it to be global.
+        annotateArray =[];
           result.records.forEach(function(record){
-            movieArrformore.push({
+            annotateArray.push({
               id: record._fields[0].identity.low,
-              title: record._fields[0].properties.argumenttext,
-              year: record._fields[0].properties.topic
+              argumenttext: record._fields[0].properties.argumenttext,
+              topic: record._fields[0].properties.topic
 
             });
-            //console.log(record._fields[0].properties);
+
           });
           res.render('pages/annotate',{
         tagline: tagline,
         somethingelse: somethingelse,
-	      movies: movieArrformore
+	      twoopinions: annotateArray
           });
         })
 
@@ -109,20 +100,24 @@ app.get('/annotate',function(req,res){
     .catch(function(err){
       console.log(err);
     });
-});//end of app.get
+});
 // End of more page section ---------------------------------------------------
 
+//SECTION FOR "DECLARING" PAGES NOW OVER. ++++++++++++++++++++++++++++++++++++++
 
 
 
 
-//HTTP POST FOR ADDING AN OPINION ------------------------------------------------
+
+//INSIDE $'s: SECTION FOR HTTP POST ACTIONS TO BE CALLED FROM PAGES. $$$$$$$$$$$$$$$$$
+
+//HTTP POST FOR ADDING AN OPINION FROM INDEX PAGE ------------------------------------
 app.post('/opinion/add',function(req,res){
   var argumenttext = req.body.argumenttext;
   var topic = req.body.topic;
 
   session
-    .run('CREATE(n:Opinion {argumenttext:{argumenttextParam},topic:{topicParam}}) RETURN n.title', {argumenttextParam:argumenttext,topicParam:topic})
+    .run('CREATE(n:Opinion {argumenttext:{argumenttextParam},topic:{topicParam}}) RETURN n.argumenttext', {argumenttextParam:argumenttext,topicParam:topic})
     .then(function(result){
       res.redirect('/');
       session.close();
@@ -132,20 +127,17 @@ app.post('/opinion/add',function(req,res){
     });
 
       res.redirect('/');
-});//end of app post
+});
 //END OF HTTP POST ADD OPINION SECTION ------------------------------------------
 
 
-
-//HTTP POST FOR ADDING A RELATIONSHIP -----------------------------------------
+//HTTP POST FOR ADDING A RELATIONSHIP FROM ANNOTATE PAGE ------------------------
 app.post('/opinion/addrelationship',function(req,res){
-  var boxselection = req.body.select; //Name from annotate (more) page form
-  //var somemovies = req.body.movies
+  var boxselection = req.body.select;
+
 
   session
-      //.run('MATCH (node1:Opinion)-[]-(node2:Opinion) WITH node1, count(node2) as rels CREATE (node1)-[relname:ARELATIONFROMTHESITE]->(node2) RETURN node1 ORDER BY rels ASC LIMIT 1')//,  {selectparam:boxselection})
-      //.run('MATCH (node1:Opinion)-[]-(node2:Opinion) WITH node1, count(node2) as rels CREATE (node1)-[relname:'+boxselection+']->(node2) RETURN node1 ORDER BY rels ASC LIMIT 1')
-      .run('MATCH (node1:Opinion {argumenttext:{argumenttextParam1}}) MATCH (node2:Opinion {argumenttext:{argumenttextParam2}}) CREATE (node1)-[relname:'+boxselection+']->(node2)', {argumenttextParam1:movieArrformore[0].title,argumenttextParam2:movieArrformore[1].title})
+      .run('MATCH (node1:Opinion {argumenttext:{argumenttextParam1}}) MATCH (node2:Opinion {argumenttext:{argumenttextParam2}}) CREATE (node1)-[relname:'+boxselection+']->(node2)', {argumenttextParam1:annotateArray[0].argumenttext,argumenttextParam2:annotateArray[1].argumenttext})
 
     .then(function(result){
       res.redirect('/annotate');
@@ -155,20 +147,16 @@ app.post('/opinion/addrelationship',function(req,res){
       console.log(err);
     });
 
-    //FOR DEBUG
-    console.log(movieArrformore[0].title); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
       res.redirect('/annotate');
-});//end of app post
+});
 //END OF HTTP POST ADD RELATIONSHIP SECTION -----------------------------------
 
+//SECTION FOR HTTP POSTS NOW OVER. $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
 
 
 
-
-
-//Listen on port 8080.
+//Listen on port 8080 (make site accessible!).
 app.listen(8080);
 console.log('8080 is the magic port');

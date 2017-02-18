@@ -22,9 +22,9 @@
             <h2> Opinions (Change to topics!) </h2>
 			<p>Make this a distinct topics list and change the link implementations so that the destination topic page is populated appropriately.</p>
             <ul>
-            <% movies.forEach(function(movie){ %>
-				<!-- can have just  	<li> %= movie.title % </li>	 	as the list element for just the text. (must add greater than signs back outside % signs)-->
-              <li> <a href="/topic"><%= movie.title %></a> </li>
+            <% topics.forEach(function(topic){ %>
+				<!-- can have just  	<li> %= topic.argumenttext % </li>	 	as the list element for just the text. (must add greater than signs back outside % signs)-->
+              <li> <a href="/topic"><%= topic.argumenttext %></a> </li>
             <% }) %>
             </ul>
 
