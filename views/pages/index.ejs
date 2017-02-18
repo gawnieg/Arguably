@@ -14,15 +14,17 @@
     <main>
         <div class="jumbotron">
             <h1>Arguably</h1>
-            <p>Welcome to templating using EJS</p>
+            <p>Choose a topic from the list below or start your own!</p>
 
 
 
 
-            <h2> Opinions (Later, make this a distinct topics list and make the names links to topic pages) </h2>
+            <h2> Opinions (Change to topics!) </h2>
+			<p>Make this a distinct topics list and change the link implementations so that the destination topic page is populated appropriately.</p>
             <ul>
             <% movies.forEach(function(movie){ %>
-              <li> <%= movie.title %> </li>
+				<!-- can have just  	<li> %= movie.title % </li>	 	as the list element for just the text. (must add greater than signs back outside % signs)-->
+              <li> <a href="/topic"><%= movie.title %></a> </li>
             <% }) %>
             </ul>
 
@@ -32,19 +34,16 @@
 
 
 <form method = "post" action ="/opinion/add">
-  <label> Initial Argument </label>
-  <input type="text" name = "argumenttext" placeholder="Your Argument here" style = "height: 120px; width:400px">
-  <br>
 
-<!--  <select name = "select">
-<option value = "value1"> Attacks </option>
-<option value = "value2" selected> Not Related To </option>
-</select>
-<br>  -->
   <label> (New?) Topic</label>
   <input type="text" name = "topic" placeholder = "Your Topic here" style = "height:120px; width:400px">
     <br>
-    <input type = "submit" value="Submit">
+	
+	<label> Initial Argument </label>
+  <input type="text" name = "argumenttext" placeholder="Your Argument here" style = "height: 120px; width:400px">
+  <br>
+  
+  <input type = "submit" value="Submit">
 
 </form>
 

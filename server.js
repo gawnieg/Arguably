@@ -64,17 +64,17 @@ app.get('/',function(req,res){
 
 
 
-//About page ------------------------------------------------------------------
-app.get('/about', function(req, res) {
-    res.render('pages/about');
+//Topic page ------------------------------------------------------------------
+app.get('/topic', function(req, res) {
+    res.render('pages/topic');
 });
 //End of about page section ---------------------------------------------------
 
 
 
 var movieArrformore =[];//NOW GLOBAL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// more page ------------------------------------------------------------------
-app.get('/more',function(req,res){
+// Annotate page ------------------------------------------------------------------
+app.get('/annotate',function(req,res){
 
  var tagline = "Any code of your own that you haven't looked at for six or more months might as w";
         var somethingelse = "THIS IS ANOTHER VARIABLE";
@@ -98,7 +98,7 @@ app.get('/more',function(req,res){
             });
             //console.log(record._fields[0].properties);
           });
-          res.render('pages/more',{
+          res.render('pages/annotate',{
         tagline: tagline,
         somethingelse: somethingelse,
 	      movies: movieArrformore
@@ -116,7 +116,7 @@ app.get('/more',function(req,res){
 
 
 
-//HTTP POST FOR ADDING A MOVIE ------------------------------------------------
+//HTTP POST FOR ADDING AN OPINION ------------------------------------------------
 app.post('/opinion/add',function(req,res){
   var argumenttext = req.body.argumenttext;
   var topic = req.body.topic;
@@ -133,7 +133,7 @@ app.post('/opinion/add',function(req,res){
 
       res.redirect('/');
 });//end of app post
-//END OF HTTP POST ADD MOVIE SECTION ------------------------------------------
+//END OF HTTP POST ADD OPINION SECTION ------------------------------------------
 
 
 
@@ -148,7 +148,7 @@ app.post('/opinion/addrelationship',function(req,res){
       .run('MATCH (node1:Opinion {argumenttext:{argumenttextParam1}}) MATCH (node2:Opinion {argumenttext:{argumenttextParam2}}) CREATE (node1)-[relname:'+boxselection+']->(node2)', {argumenttextParam1:movieArrformore[0].title,argumenttextParam2:movieArrformore[1].title})
 
     .then(function(result){
-      res.redirect('/more');
+      res.redirect('/annotate');
       session.close();
     })
     .catch(function(err){
@@ -158,7 +158,7 @@ app.post('/opinion/addrelationship',function(req,res){
     //FOR DEBUG
     console.log(movieArrformore[0].title); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-      res.redirect('/more');
+      res.redirect('/annotate');
 });//end of app post
 //END OF HTTP POST ADD RELATIONSHIP SECTION -----------------------------------
 
