@@ -1,5 +1,7 @@
 // server.js
 // load the things we need
+
+//This is to bring express - app is the express object which links us to express
 var express = require('express');
 var app = express();
 
@@ -23,35 +25,32 @@ var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic('neo4j','goats'));
 var session = driver.session();
 
 
-
-
-
 //INSIDE +'s: SECTION FOR "DECLARING" PAGES. ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // index page -----------------------------------------------------------------
-app.get('/',function(req,res){
 
- var tagline = "Any code of your own that you haven't looked at for six or more months might as w";
-        var somethingelse = "THIS IS ANOTHER VARIABLE";
+  ///ROB NEW STUFF
 
-  session
-    .run('MATCH(n:Opinion) RETURN n LIMIT 100')
-    .then(function(result){
-        var topicArray =[];
-          result.records.forEach(function(record){
-            topicArray.push({
-              id: record._fields[0].identity.low,
-              argumenttext: record._fields[0].properties.argumenttext,
-              topic: record._fields[0].properties.topic
+  // index page -----------------------------------------------------------------
+  app.get('/',function(req,res){
+
+    session
+      .run('MATCH(n:Opinion) RETURN DISTINCT n.topic LIMIT 100')
+      .then(function(result){
+          var topicArray =[];
+            result.records.forEach(function(record){
+              topicArray.push({
+                topic: record._fields[0]
+              });
+
             });
-			
-          });
-          res.render('pages/index',{
-        tagline: tagline,
-        somethingelse: somethingelse,
-	 topics: topicArray
-          });
-        })
+            res.render('pages/index',{
+  	        topics: topicArray
+            });
+          })
+
+  ///ROB NEW STUFF
+
 
     .catch(function(err){
       console.log(err);
@@ -64,6 +63,12 @@ app.get('/',function(req,res){
 app.get('/topic', function(req, res) {
     res.render('pages/topic');
 });
+//End of topic page section ---------------------------------------------------
+
+//About page ------------------------------------------------------------------
+app.get('/about_us', function(req, res) {
+    res.render('pages/about_us');
+});
 //End of about page section ---------------------------------------------------
 
 
@@ -71,8 +76,8 @@ app.get('/topic', function(req, res) {
 var annotateArray =[];//Globally declared to be accesible to a function lower down.
 app.get('/annotate',function(req,res){
 
- var tagline = "Any code of your own that you haven't looked at for six or more months might as w";
- var somethingelse = "THIS IS ANOTHER VARIABLE";
+// var tagline = "Any code of your own that you haven't looked at for six or more months might as w";
+// var somethingelse = "THIS IS ANOTHER VARIABLE";
 
   session
 	  .run('MATCH (node1:Opinion)-[]-(node2:Opinion) WITH node1,count(node2) as rels RETURN node1 ORDER BY rels ASC LIMIT 2')
@@ -90,8 +95,8 @@ app.get('/annotate',function(req,res){
 
           });
           res.render('pages/annotate',{
-        tagline: tagline,
-        somethingelse: somethingelse,
+        //tagline: tagline,
+        //somethingelse: somethingelse,
 	      twoopinions: annotateArray
           });
         })
