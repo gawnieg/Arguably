@@ -19,7 +19,6 @@
         stroke-width:3px;
         fill:#555;
         }
-
 </style>
 </head>
 <body>
@@ -54,17 +53,24 @@
               .data(json.nodes)
               .enter().append("g")
               .attr("class", "node")
-              .call(force.drag);
-              
+              .call(force.drag)
+              .on("mouseover", showText)
+              .on("mouseout", removeText);
 
     node.append("circle")
         .attr("r","5");
 
-    node.append("text")
-        .attr("dx", 12)
-        .attr("dy", ".35em")
-        .text(function(d) { return d.name });
 
+    function showText(d, i) {
+            d3.select(this).append("text")
+                       .attr("dx",12)
+                       .attr("dy", ".35em")
+                       .text(function(d){return d.name});
+      }
+
+    function removeText(d, i) {
+            d3.select(this).select("text").remove()
+     }
   force.on("tick", function() {
     link.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
