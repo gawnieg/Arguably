@@ -14,15 +14,15 @@
     <main>
         <div class="jumbotron">
             <h1>Annotation Page</h1>
-            <p>Choose the relationship between the displayed opinions.</p>
+            <p>Choose whether opinion 1 attacks, supports or is unrelated to opinion 2.</p>
 
 
 
 
             <h2> Opinions: </h2>
-            <ul>
-            <% twoopinions.forEach(function(opinion){ %>
-              <li> <%= opinion.argumenttext %> </li>
+            <ul style="list-style-type:none"> 
+            <% twoopinions.forEach(function(opinion,index){ %>
+              <li> <%= (index+1) %>) <%= opinion.argumenttext %> </li>
             <% }) %>
             </ul>
 

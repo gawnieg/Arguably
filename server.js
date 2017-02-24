@@ -75,7 +75,9 @@ app.get('/annotate',function(req,res){
  var somethingelse = "THIS IS ANOTHER VARIABLE";
 
   session
-	  .run('MATCH (node1:Opinion)-[]-(node2:Opinion) WITH node1,count(node2) as rels RETURN node1 ORDER BY rels ASC LIMIT 2')
+	  //.run('MATCH (node1:Opinion)-[]-(node2:Opinion) WITH node1,count(node2) as rels RETURN node1 ORDER BY rels ASC LIMIT 2')
+	  .run('MATCH (node1:Opinion) OPTIONAL MATCH (node1)-[r]-(node2:Opinion) WITH node1, count(r) as rels RETURN node1 ORDER BY rels ASC LIMIT 2')
+
 
     .then(function(result){
         //var annotateArray =[]; //If don't want it to be global.
