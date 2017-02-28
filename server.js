@@ -33,7 +33,6 @@ var session = driver.session();
   app.get('/topicspage/:name', function(req, res){
 
     res.render('topicspage', {which_topic: req.params.name});
-//    var searchfor= req.params.name;
 
     });
 
