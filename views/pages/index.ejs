@@ -18,10 +18,11 @@
 
 
             <h2> List of topics </h2>
-			<!-- <p>Make this a distinct topics list and change the link implementations so that the destination topic page is populated appropriately.</p> -->
             <ul>
+              <!-- This lists and links the topics to their dynamically created web pagtes -->
             <% topics.forEach(function(topic){ %>
-              <li> <a href="/topic"><%= topic.topic %></a> </li>
+            <% var link = "/topicspage/" + topic.topic %>
+              <li> <a href= <%=link%> ><%= topic.topic %></a> </li>
             <% }) %>
             </ul>
 

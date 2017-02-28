@@ -31,7 +31,7 @@ var session = driver.session();
 //Dynamic page creation - james
 
   app.get('/topicspage/:name', function(req, res){
-
+    'MATCH (n:Opinion) WHERE Opinion.topic = ' + req.params.name + 'RETURN n'
     res.render('topicspage', {which_topic: req.params.name});
 
     });
