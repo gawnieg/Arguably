@@ -21,7 +21,9 @@
             <ul>
               <!-- This lists and links the topics to their dynamically created web pagtes -->
             <% topics.forEach(function(topic){ %>
-            <% var link = "/topicspage/" + topic.topic %>
+
+            <% var link = "/topicspage/" + topic.topic.replace(/ +/g, "_") %>
+
               <li> <a href= <%=link%> ><%= topic.topic %></a> </li>
             <% }) %>
             </ul>
