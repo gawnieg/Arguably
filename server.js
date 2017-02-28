@@ -2,15 +2,16 @@
 // load the things we need
 
 //This is to bring express - app is the express object which links us to express
-var express = require('express');
-var app = express();
+var express = require('express'); // - express is the module name
+var app = express(); // this is the express app which gives us access to ex[presses' functionality
+                    //express() fires the express function giving us access
 
 var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var neo4j = require('neo4j-driver').v1;
 
-// set the view engine to ejs
+// set the view engine to ejs - now by default it will look for views in the view folder
 app.set('view engine', 'ejs');
 app.set('views',path.join(__dirname,'views'));
 
@@ -27,11 +28,18 @@ var session = driver.session();
 
 //INSIDE +'s: SECTION FOR "DECLARING" PAGES. ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+//Dynamic page creation - james
+
+  app.get('/topicspage/:name', function(req, res){
+
+    res.render('topicspage', {which_topic: req.params.name});
+//    var searchfor= req.params.name;
+
+    });
+
+// Dynamic page creation - james
+
 // index page -----------------------------------------------------------------
-
-  ///ROB NEW STUFF
-
-  // index page -----------------------------------------------------------------
   app.get('/',function(req,res){
 
     session
@@ -49,21 +57,11 @@ var session = driver.session();
             });
           })
 
-  ///ROB NEW STUFF
-
-
     .catch(function(err){
       console.log(err);
     });
 });
-// End of index page section --------------------------------------------------
-
-
-//Topic page ------------------------------------------------------------------
-app.get('/topic', function(req, res) {
-    res.render('pages/topic');
-});
-//End of topic page section ---------------------------------------------------
+// End of index page section ----------------------------------
 
 //About page ------------------------------------------------------------------
 app.get('/about_us', function(req, res) {
@@ -71,6 +69,17 @@ app.get('/about_us', function(req, res) {
 });
 //End of about page section ---------------------------------------------------
 
+//Contact page ------------------------------------------------------------------
+app.get('/contact_us', function(req, res) {
+    res.render('pages/contact_us');
+});
+//End of contact page section ---------------------------------------------------
+
+//Topic page ------------------------------------------------------------------
+app.get('/topic', function(req, res) {
+    res.render('pages/topic');
+});
+//End of Topic page section ---------------------------------------------------
 
 // Annotate page ------------------------------------------------------------------
 var annotateArray =[];//Globally declared to be accesible to a function lower down.
@@ -107,6 +116,12 @@ app.get('/annotate',function(req,res){
     });
 });
 // End of more page section ---------------------------------------------------
+
+// THIS MUST REMAIN THE LAST APP>GET & APP>USE PAGE ///
+
+// app.use(function(req, res, next){
+//     res.status(404).render('pages/404_error_template', {title: "Sorry, page not found"});
+// });
 
 //SECTION FOR "DECLARING" PAGES NOW OVER. ++++++++++++++++++++++++++++++++++++++
 
