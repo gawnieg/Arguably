@@ -34,30 +34,25 @@ var session = driver.session();
     // 'MATCH (n:Opinion) WHERE Opinion.topic = ' + req.params.name + 'RETURN n'
     res.render('topicspage', {which_topic: req.params.name.replace(/_+/g, " ")});
 
-    session
-      .run('MATCH (n:Opinion) WHERE Opinion.topic = ' + req.params.name.replace(/_+/g, " ") + 'RETURN n')
-      .then(function(result){
-          var topicArray =[];
-            result.records.forEach(function(record){
-              topicArray.push({
-                topic: record._fields[0]
-              });
-
-            });
-            res.render('topicspage',{
-                which_topic: req.params.name.replace(/_+/g, " "),
-                topics: topicArray
-            });
-          })
-
-    .catch(function(err){
-      console.log(err);
-    });
-
-
-
-
-
+    // session
+    //   .run('MATCH (n:Opinion) WHERE Opinion.topic = ' + req.params.name.replace(/_+/g, " ") + 'RETURN n')
+    //   .then(function(result){
+    //       var topicArray =[];
+    //         result.records.forEach(function(record){
+    //           topicArray.push({
+    //             topic: record._fields[0]
+    //           });
+    //
+    //         });
+    //         res.render('topicspage',{
+    //             which_topic: req.params.name.replace(/_+/g, " "),
+    //             topics: topicArray
+    //         });
+    //       })
+    //
+    // .catch(function(err){
+    //   console.log(err);
+    // });
 
 
     });
