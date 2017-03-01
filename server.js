@@ -28,7 +28,7 @@ var session = driver.session();
 
 //INSIDE +'s: SECTION FOR "DECLARING" PAGES. ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//Dynamic page creation - james
+//Dynamic topic page creation - james
 
   app.get('/topicspage/:name', function(req, res){
     // 'MATCH (n:Opinion) WHERE Opinion.topic = ' + req.params.name + 'RETURN n'
@@ -59,7 +59,43 @@ var session = driver.session();
 
     });
 
-// Dynamic page creation - james
+// Dynamic topic page creation - james
+
+
+// Dynamic annotate page creation
+var annotateArrayTwo =[];//Globally declared to be accesible to a function lower down.
+app.get('/annotate_topic/:name', function(req, res){
+
+    session
+      .run('MATCH (node1:Opinion {topic: \"'+req.params.name.replace(/_+/g, " ")+'\"}) OPTIONAL MATCH (node1)-[r]-(node2:Opinion) WITH node1, count(r) as rels RETURN node1 ORDER BY rels ASC LIMIT 2')
+
+      .then(function(result){
+
+          //var annotateArray =[]; //If don't want it to be global.
+          annotateArrayTwo =[];
+            result.records.forEach(function(record){
+//              console.log(record._fields[0].properties.argumenttext);
+              annotateArrayTwo.push({
+                id: record._fields[0].identity.low,
+                argumenttext: record._fields[0].properties.argumenttext,
+                topic: record._fields[0].properties.topic
+
+              });
+
+            });
+            res.render('annotate_topic', {
+              which_topic: req.params.name.replace(/_+/g, " "),
+  	          twoopinions: annotateArrayTwo
+            });
+          })
+
+
+
+      .catch(function(err){
+        console.log(err);
+      });
+  });
+  // Dynamic annotate page creation - END
 
 // index page -----------------------------------------------------------------
   app.get('/',function(req,res){
@@ -96,12 +132,6 @@ app.get('/contact_us', function(req, res) {
     res.render('pages/contact_us');
 });
 //End of contact page section ---------------------------------------------------
-
-//Topic page ------------------------------------------------------------------
-app.get('/topic', function(req, res) {
-    res.render('pages/topic');
-});
-//End of Topic page section ---------------------------------------------------
 
 // Annotate page ------------------------------------------------------------------
 var annotateArray =[];//Globally declared to be accesible to a function lower down.
@@ -181,7 +211,9 @@ app.post('/opinion/addrelationship',function(req,res){
 
 
   session
-      .run('MATCH (node1:Opinion {argumenttext:{argumenttextParam1}}) MATCH (node2:Opinion {argumenttext:{argumenttextParam2}}) CREATE (node1)-[relname:'+boxselection+']->(node2)', {argumenttextParam1:annotateArray[0].argumenttext,argumenttextParam2:annotateArray[1].argumenttext})
+      .run("MATCH (node1:Opinion {argumenttext:{argumenttextParam1}}) \
+           MATCH (node2:Opinion {argumenttext:{argumenttextParam2}}) CREATE (node1)-[relname:"+boxselection+"]->(node2)",
+           {argumenttextParam1:annotateArray[0].argumenttext,argumenttextParam2:annotateArray[1].argumenttext})
 
     .then(function(result){
       res.redirect('/annotate');
@@ -194,6 +226,29 @@ app.post('/opinion/addrelationship',function(req,res){
       res.redirect('/annotate');
 });
 //END OF HTTP POST ADD RELATIONSHIP SECTION -----------------------------------
+
+
+//HTTP POST FOR ADDING A RELATIONSHIP FROM ANNOTATE PAGE ------------------------
+app.post('/opinion/addrelationship_byopinion',function(req,res){
+  var boxselection = req.body.select;
+  var topic = annotateArrayTwo[0].topic.replace(/ +/g, "_");
+
+  session
+      .run("MATCH (node1:Opinion {argumenttext:{argumenttextParam1}, topic:{topicParam}}) MATCH (node2:Opinion {argumenttext:{argumenttextParam2}, topic:{topicParam}}) \
+            CREATE (node1)-[relname:"+boxselection+"]->(node2)", {argumenttextParam1:annotateArrayTwo[0].argumenttext,argumenttextParam2:annotateArrayTwo[1].argumenttext,topicParam:annotateArrayTwo[0].topic})
+
+    .then(function(result){
+      res.redirect('/annotate_topic/' + topic);
+      session.close();
+    })
+    .catch(function(err){
+      console.log(err);
+    });
+
+      res.redirect('/annotate_topic/' + topic);
+});
+//END OF HTTP POST ADD RELATIONSHIP SECTION -----------------------------------
+
 
 //SECTION FOR HTTP POSTS NOW OVER. $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 

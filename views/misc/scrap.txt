@@ -1,7 +1,0 @@
-<!-- <ul>
-This lists and links the topics to their dynamically created web pagtes
-<% topics.forEach(function(topic){ %>
-
-  <li> <%= topics.topic %> </li>
-<% }) %>
-</ul> -->

@@ -14,15 +14,13 @@
     <main>
 
                 <div class="jumbotron">
-                    <h1>This is the topic page for: <%= which_topic %></h1>
-                    <p> <br /> Make the above text a variable that corresponds to topic chosen.
-					Below, list the argumenttext properties of all opinion nodes whose
-					topic matches the chosen one. Also include a form to add new opinions
-					whose created nodes will automatically have the appropriate topic property.</p>
+                    <h1>Topic: <%= which_topic %></h1>
+                    <br />
 
-          <h2> List of related arguments: </h2>
+          <h2> Related propositions: </h2>
+          <br />
 	<ul>
-	This lists and links the topics to their dynamically created web pagtes
+
 	<% topics.forEach(function(topic){ %>
 
 	  <li> <%= topic.argumenttext %> </li>
@@ -31,8 +29,14 @@
 
 
 
-                </div>
 
+    <br /> <br />
+
+    <% var link = "/annotate_topic/" + which_topic.replace(/ +/g, "_") %>
+    <p><a href= <%=link%> > Click here to Annotate this Topic!</a>
+
+
+    </div>
 
 
     </main>
