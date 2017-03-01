@@ -21,7 +21,13 @@
 					whose created nodes will automatically have the appropriate topic property.</p>
 
           <h2> List of related arguments: </h2>
+	<ul>
+	This lists and links the topics to their dynamically created web pagtes
+	<% topics.forEach(function(topic){ %>
 
+	  <li> <%= topic.argumenttext %> </li>
+	<% }) %>
+	</ul>
 
 
 
