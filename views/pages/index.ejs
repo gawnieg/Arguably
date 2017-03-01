@@ -17,14 +17,14 @@
             <p>Choose a topic from the list below or start your own!</p>
 
 
-
-
-            <h2> Opinions (Change to topics!) </h2>
-			<p>Make this a distinct topics list and change the link implementations so that the destination topic page is populated appropriately.</p>
+            <h2> List of topics </h2>
             <ul>
+              <!-- This lists and links the topics to their dynamically created web pagtes -->
             <% topics.forEach(function(topic){ %>
-				<!-- can have just  	<li> %= topic.argumenttext % </li>	 	as the list element for just the text. (must add greater than signs back outside % signs)-->
-              <li> <a href="/topic"><%= topic.argumenttext %></a> </li>
+
+            <% var link = "/topicspage/" + topic.topic.replace(/ +/g, "_") %>
+
+              <li> <a href= <%=link%> ><%= topic.topic %></a> </li>
             <% }) %>
             </ul>
 
@@ -35,14 +35,14 @@
 
 <form method = "post" action ="/opinion/add">
 
-  <label> (New?) Topic</label>
+  <label> Suggest a new Topic</label>
   <input type="text" name = "topic" placeholder = "Your Topic here" style = "height:120px; width:400px">
     <br>
-	
+
 	<label> Initial Argument </label>
   <input type="text" name = "argumenttext" placeholder="Your Argument here" style = "height: 120px; width:400px">
   <br>
-  
+
   <input type = "submit" value="Submit">
 
 </form>

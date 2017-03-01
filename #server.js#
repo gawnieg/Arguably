@@ -1,17 +1,16 @@
-// server.js
+// Server.J
 // load the things we need
 
 //This is to bring express - app is the express object which links us to express
-var express = require('express'); // - express is the module name
-var app = express(); // this is the express app which gives us access to ex[presses' functionality
-                    //express() fires the express function giving us access
+var express = require('express');
+var app = express();
 
 var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var neo4j = require('neo4j-driver').v1;
 
-// set the view engine to ejs - now by default it will look for views in the view folder
+// set the view engine to ejs
 app.set('view engine', 'ejs');
 app.set('views',path.join(__dirname,'views'));
 
@@ -28,38 +27,11 @@ var session = driver.session();
 
 //INSIDE +'s: SECTION FOR "DECLARING" PAGES. ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//Dynamic page creation - james
-
-  app.get('/topicspage/:name', function(req, res){
-    // 'MATCH (n:Opinion) WHERE Opinion.topic = ' + req.params.name + 'RETURN n'
-    res.render('topicspage', {which_topic: req.params.name.replace(/_+/g, " ")});
-
-    // session
-    //   .run('MATCH (n:Opinion) WHERE Opinion.topic = ' + req.params.name.replace(/_+/g, " ") + 'RETURN n')
-    //   .then(function(result){
-    //       var topicArray =[];
-    //         result.records.forEach(function(record){
-    //           topicArray.push({
-    //             topic: record._fields[0]
-    //           });
-    //
-    //         });
-    //         res.render('topicspage',{
-    //             which_topic: req.params.name.replace(/_+/g, " "),
-    //             topics: topicArray
-    //         });
-    //       })
-    //
-    // .catch(function(err){
-    //   console.log(err);
-    // });
-
-
-    });
-
-// Dynamic page creation - james
-
 // index page -----------------------------------------------------------------
+
+  ///ROB NEW STUFF
+
+  // index page -----------------------------------------------------------------
   app.get('/',function(req,res){
 
     session
@@ -76,6 +48,9 @@ var session = driver.session();
   	        topics: topicArray
             });
           })
+
+  ///ROB NEW STUFF
+
 
     .catch(function(err){
       console.log(err);
@@ -95,11 +70,6 @@ app.get('/contact_us', function(req, res) {
 });
 //End of contact page section ---------------------------------------------------
 
-//Topic page ------------------------------------------------------------------
-app.get('/topic', function(req, res) {
-    res.render('pages/topic');
-});
-//End of Topic page section ---------------------------------------------------
 
 // Annotate page ------------------------------------------------------------------
 var annotateArray =[];//Globally declared to be accesible to a function lower down.
@@ -109,9 +79,7 @@ app.get('/annotate',function(req,res){
 // var somethingelse = "THIS IS ANOTHER VARIABLE";
 
   session
-	  //.run('MATCH (node1:Opinion)-[]-(node2:Opinion) WITH node1,count(node2) as rels RETURN node1 ORDER BY rels ASC LIMIT 2')
-	  .run('MATCH (node1:Opinion) OPTIONAL MATCH (node1)-[r]-(node2:Opinion) WITH node1, count(r) as rels RETURN node1 ORDER BY rels ASC LIMIT 2')
-
+	  .run('MATCH (node1:Opinion)-[]-(node2:Opinion) WITH node1,count(node2) as rels RETURN node1 ORDER BY rels ASC LIMIT 2')
 
     .then(function(result){
         //var annotateArray =[]; //If don't want it to be global.
@@ -138,12 +106,6 @@ app.get('/annotate',function(req,res){
     });
 });
 // End of more page section ---------------------------------------------------
-
-// THIS MUST REMAIN THE LAST APP>GET & APP>USE PAGE ///
-
-// app.use(function(req, res, next){
-//     res.status(404).render('pages/404_error_template', {title: "Sorry, page not found"});
-// });
 
 //SECTION FOR "DECLARING" PAGES NOW OVER. ++++++++++++++++++++++++++++++++++++++
 
