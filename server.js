@@ -30,11 +30,11 @@ var session = driver.session();
 
 //Dynamic topic page creation - james
 
-var globalMostRecentTopic = "not configured";
+//var globalMostRecentTopic = "not configured";
 app.get('/topicspage/:name', function(req, res){
     // 'MATCH (n:Opinion) WHERE Opinion.topic = ' + req.params.name + 'RETURN n'
     //res.render('topicspage', {which_topic: req.params.name.replace(/_+/g, " ")});
-    globalMostRecentTopic = req.params.name.replace(/_+/g, " ");
+    //globalMostRecentTopic = req.params.name.replace(/_+/g, " ");
     session
 	.run('MATCH (n:Opinion) WHERE n.topic = \"' + req.params.name.replace(/_+/g, " ") + '\" RETURN n')
 	.then(function(result){
@@ -209,23 +209,50 @@ app.post('/opinion/add',function(req,res){
 
 app.post('/opinion/addArgToTopic',function(req,res){
     var argumenttext = req.body.argumenttext;
-
-    console.log(globalMostRecentTopic);
-
-    
-    var topic = globalMostRecentTopic;
+    //console.log(globalMostRecentTopic);
+    console.log(req.body);
+    //var topic = globalMostRecentTopic;
+    var topic = req.body.Topic;
 
     session
 	.run('CREATE(n:Opinion {argumenttext:{argumenttextParam},topic:{topicParam}}) RETURN n.argumenttext', {argumenttextParam:argumenttext,topicParam:topic})
 	.then(function(result){
-	    res.redirect('/topicspage/' + globalMostRecentTopic.replace(/ +/g, "_"));
+	    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
 	    session.close();
 	})
 	.catch(function(err){
 	    console.log(err);
 	});
 
-    res.redirect('/topicspage/' + globalMostRecentTopic.replace(/ +/g, "_"));
+    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
+});
+
+
+
+app.post('/opinion/addReply', function(req,res) {
+    var replyText = req.body.reply;
+    var topic = req.body.Topic.replace(/_+/g, " ");
+    var initialArg = req.body.initialArg.replace(/_+/g, " ");
+
+    session
+        .run("MATCH (initNode: Opinion {argumenttext:{initialArgParam}, topic:{topicParam}}) CREATE \
+              (initNode) <- [r:REPLY] - (newNode: Opinion {argumenttext:{replyTextParam}, topic: \
+              {topicParam}})", {initialArgParam: initialArg, replyTextParam: replyText, topicParam: topic}) 
+	.then(function(result){
+	    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
+	    session.close();
+	})
+	.catch(function(err){
+	    console.log(err);
+	});
+
+    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
+    
+    
+    console.log(req.body);
+
+    
+
 });
 
 

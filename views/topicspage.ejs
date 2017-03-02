@@ -20,9 +20,17 @@
 	<ul>
 
 	  <% topics.forEach(function(topic){ %>
-
-	  <li> <%= topic.argumenttext %> </li>
-	  <% }) %>
+	  
+	  <li> <%= topic.argumenttext %>
+	    <form method = "post" action ="/opinion/addReply">
+	      <input type="text" name= "reply" size="25">
+	      <input type="hidden" class="topic" name="Topic" value = <%=which_topic.replace(/ +/g, "_")%> />
+	      <input type="hidden" class="initialArg" name="initialArg" value = <%=topic.argumenttext.replace(/ +/g, "_") %> />
+	      <input type = "submit" value="Reply">
+	  </form>
+	    <% }) %>
+	  
+	   </li>
 	</ul>
 
 	<form method = "post" action ="/opinion/addArgToTopic">
@@ -31,7 +39,7 @@
 	  <br>
 	  <input type="text" name = "argumenttext" placeholder="Your Argument here" style = "height: 120px; width:400px">
 	  <br>
-
+	  <input type="hidden" class="topic" name="Topic" value = <%=which_topic.replace(/ +/g, "_") %> />
 	  <input type = "submit" value="Submit">
 
 	</form>
