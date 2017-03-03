@@ -23,21 +23,32 @@
 	  
 	  <li> <%= topic.argumenttext %>
 	    <form method = "post" action ="/opinion/addReply">
-	      <input type="text" name= "reply" size="25">
+	      <input type="text" name= "reply" size="25" required>
 	      <input type="hidden" class="topic" name="Topic" value = <%=which_topic.replace(/ +/g, "_")%> />
-	      <input type="hidden" class="initialArg" name="initialArg" value = <%=topic.argumenttext.replace(/ +/g, "_") %> />
+	      <input type="hidden" class="initialArg"
+	      name="initialArg" value =
+		     <%=topic.argumenttext.replace(/ +/g, "_") %> />
+	      <label> Select relationship </label>
+
+	      <select name = "relType">
+		<option value = "ATTACKS"> Attacks </option>
+		<option value = "SUPPORTS"> Supports </option>
+		<option value = "UNRELATED" selected> Unrelated </option>
+	      </select>
+	      <br>
+	      
 	      <input type = "submit" value="Reply">
-	  </form>
+	    </form>
 	    <% }) %>
-	  
-	   </li>
+	    
+	  </li>
 	</ul>
 
 	<form method = "post" action ="/opinion/addArgToTopic">
 
 	  <label> Continue the conversation!! </label>
 	  <br>
-	  <input type="text" name = "argumenttext" placeholder="Your Argument here" style = "height: 120px; width:400px">
+	  <input type="text" name = "argumenttext" placeholder="Your Argument here"style="height:120px;	width:400px" required>
 	  <br>
 	  <input type="hidden" class="topic" name="Topic" value = <%=which_topic.replace(/ +/g, "_") %> />
 	  <input type = "submit" value="Submit">

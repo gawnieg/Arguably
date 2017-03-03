@@ -36,11 +36,12 @@ app.get('/topicspage/:name', function(req, res){
     //res.render('topicspage', {which_topic: req.params.name.replace(/_+/g, " ")});
     //globalMostRecentTopic = req.params.name.replace(/_+/g, " ");
     session
-	.run('MATCH (n:Opinion) WHERE n.topic = \"' + req.params.name.replace(/_+/g, " ") + '\" RETURN n')
+	.run("MATCH (n:Opinion) WHERE n.topic = \"" + req.params.name.replace(/_+/g, " ") + "\" RETURN n")
 	.then(function(result){
             //var topicArray =[];
 	    var topicArray =[];
-            result.records.forEach(function(record){
+
+	    result.records.forEach(function(record){
 		topicArray.push({
                     id: record._fields[0].identity.low,
                     argumenttext: record._fields[0].properties.argumenttext,
@@ -48,6 +49,7 @@ app.get('/topicspage/:name', function(req, res){
 		});
 
             });
+	    
             res.render('topicspage',{
                 which_topic: req.params.name.replace(/_+/g, " "),
                 topics: topicArray
@@ -60,6 +62,13 @@ app.get('/topicspage/:name', function(req, res){
 
 
 });
+
+
+function isParent(nodeId) {
+
+}
+
+
 
 // Dynamic topic page creation - james
 
@@ -171,6 +180,7 @@ app.get('/annotate',function(req,res){
 	    console.log(err);
 	});
 });
+
 // End of more page section ---------------------------------------------------
 
 // THIS MUST REMAIN THE LAST APP>GET & APP>USE PAGE ///
@@ -212,7 +222,7 @@ app.post('/opinion/addArgToTopic',function(req,res){
     //console.log(globalMostRecentTopic);
     console.log(req.body);
     //var topic = globalMostRecentTopic;
-    var topic = req.body.Topic;
+    var topic = req.body.Topic.replace(/_+/g, " ");
 
     session
 	.run('CREATE(n:Opinion {argumenttext:{argumenttextParam},topic:{topicParam}}) RETURN n.argumenttext', {argumenttextParam:argumenttext,topicParam:topic})
@@ -233,11 +243,12 @@ app.post('/opinion/addReply', function(req,res) {
     var replyText = req.body.reply;
     var topic = req.body.Topic.replace(/_+/g, " ");
     var initialArg = req.body.initialArg.replace(/_+/g, " ");
-
+    var relType = req.body.relType;
+    
     session
         .run("MATCH (initNode: Opinion {argumenttext:{initialArgParam}, topic:{topicParam}}) CREATE \
               (initNode) <- [r:REPLY] - (newNode: Opinion {argumenttext:{replyTextParam}, topic: \
-              {topicParam}})", {initialArgParam: initialArg, replyTextParam: replyText, topicParam: topic}) 
+{topicParam}}) CREATE (initNode) <- [rel: " + relType + " ] - (newNode)", {initialArgParam: initialArg, replyTextParam: replyText, topicParam: topic}) 
 	.then(function(result){
 	    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
 	    session.close();
@@ -250,7 +261,6 @@ app.post('/opinion/addReply', function(req,res) {
     
     
     console.log(req.body);
-
     
 
 });
@@ -303,9 +313,6 @@ CREATE (node1)-[relname:"+boxselection+"]->(node2)", {argumenttextParam1:annotat
 
 
 //SECTION FOR HTTP POSTS NOW OVER. $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-
-
 
 
 //Listen on port 8080 (make site accessible!).

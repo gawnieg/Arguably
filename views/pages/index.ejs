@@ -13,41 +13,39 @@
 
     <main>
         <div class="jumbotron">
-            <h1>Arguably</h1>
-            <p>Choose a topic from the list below or start your own!</p>
+          <h1>Arguably</h1>
+          <p>Choose a topic from the list below or start your own!</p>
 
 
-            <h2> List of topics </h2>
-            <ul>
-              <!-- This lists and links the topics to their dynamically created web pagtes -->
+          <h2> List of topics </h2>
+          <ul>
+            <!-- This lists and links the topics to their dynamically created web pagtes -->
             <% topics.forEach(function(topic){ %>
 
             <% var link = "/topicspage/" + topic.topic.replace(/ +/g, "_") %>
 
-              <li> <a href= <%=link%> ><%= topic.topic %></a> </li>
+            <li> <a href= <%=link%> ><%= topic.topic %></a> </li>
             <% }) %>
-            </ul>
+          </ul>
 
 
+	  <form method = "post" action ="/opinion/add">
 
+	    <label> Suggest a new Topic</label>
+	    <br>
+	    <input type="text" name = "topic" placeholder = "Your Topic here"
+		   style = "height:120px; width:400px" required>
+	    <br>
 
+	    <label> Initial Argument </label>
+	    <br>
+	    <input type="text" name = "argumenttext" placeholder="Your Argument here" style =
+		   "height: 120px; width:400px" required>
+	    <br>
 
+	    <input type = "submit" value="Submit">
 
-<form method = "post" action ="/opinion/add">
-
-  <label> Suggest a new Topic</label>
-  <br>
-  <input type="text" name = "topic" placeholder = "Your Topic here" style = "height:120px; width:400px">
-    <br>
-
-	<label> Initial Argument </label>
-  <br>
-  <input type="text" name = "argumenttext" placeholder="Your Argument here" style = "height: 120px; width:400px">
-  <br>
-
-  <input type = "submit" value="Submit">
-
-</form>
+	  </form>
 
 
 
