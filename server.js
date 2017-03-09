@@ -263,5 +263,5 @@ app.post('/opinion/addrelationship_byopinion',function(req,res){
 
 
 //Listen on port 8080 (make site accessible!).
-app.listen(8080);
+app.listen(8080||process.env.PORT);
 console.log('8080 is the magic port');
