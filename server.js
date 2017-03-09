@@ -193,6 +193,50 @@ app.get('/annotate',function(req,res){
 
 
 
+//SECTION FOR DOWNLOAD ALL BUTTON ON HOMEPAGE
+app.get('/download_all',function(req,res){
+var Download_all_Array=[];
+
+    session
+        .run('MATCH (n:Opinion) RETURN DISTINCT n.topic LIMIT 100')//can change this query to suit
+        .then(function(result){
+                result.records.forEach(function(record){
+                Download_all_Array.push({
+                    topic: record._fields[0]
+                });
+
+            });
+
+	var json = JSON.stringify(Download_all_Array);//prep the data, this is essential
+	var filename = 'all_data.json';
+	var mimetype = 'application/json';
+	res.setHeader('Content-Type', mimetype);
+	res.setHeader('Content-disposition','attachment; filename='+filename);
+	res.send( json );//send the file to the client
+        })
+
+        .catch(function(err){
+            console.log(err);
+        });
+
+});//end of download all
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //INSIDE $'s: SECTION FOR HTTP POST ACTIONS TO BE CALLED FROM PAGES. $$$$$$$$$$$$$$$$$
