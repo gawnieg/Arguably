@@ -36,12 +36,15 @@ app.get('/topicspage/:name', function(req, res){
     //res.render('topicspage', {which_topic: req.params.name.replace(/_+/g, " ")});
     //globalMostRecentTopic = req.params.name.replace(/_+/g, " ");
     session
-	.run("MATCH (n:Opinion) WHERE n.topic = \"" + req.params.name.replace(/_+/g, " ") + "\" RETURN n")
+        .run("MATCH (a:Opinion) WHERE a.topic = \""+req.params.name.replace(/_+/g," ") +  "\" OPTIONAL MATCH ((a) <- [r:REPLY] - (b:Opinion)) WITH a,collect(b) AS replies  ORDER BY id(a) RETURN a,replies")
+    
+//	.run("MATCH (n:Opinion) WHERE n.topic = \"" + req.params.name.replace(/_+/g, " ") + "\" RETURN n")
 	.then(function(result){
             //var topicArray =[];
 	    var topicArray =[];
 
 	    result.records.forEach(function(record){
+		console.log(record._fields[1]);
 		topicArray.push({
                     id: record._fields[0].identity.low,
                     argumenttext: record._fields[0].properties.argumenttext,
