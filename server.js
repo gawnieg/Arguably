@@ -1,3 +1,4 @@
+
 // server.js
 // load the things we need
 
@@ -32,35 +33,19 @@ var session = driver.session();
 
 //var globalMostRecentTopic = "not configured";
 app.get('/topicspage/:name', function(req, res){
-    // 'MATCH (n:Opinion) WHERE Opinion.topic = ' + req.params.name + 'RETURN n'
-    //res.render('topicspage', {which_topic: req.params.name.replace(/_+/g, " ")});
-    //globalMostRecentTopic = req.params.name.replace(/_+/g, " ");
+
     session
-        .run("MATCH (a:Opinion) WHERE a.topic = \""+req.params.name.replace(/_+/g," ") +  "\" OPTIONAL MATCH ((a) <- [r:REPLY] - (b:Opinion)) WITH a,collect(b) AS replies  ORDER BY id(a) RETURN a,replies")
-    
-//	.run("MATCH (n:Opinion) WHERE n.topic = \"" + req.params.name.replace(/_+/g, " ") + "\" RETURN n")
+        .run("MATCH (a:Opinion) WHERE a.topic = \""+req.params.name.replace(/_+/g," ") +  "\" OPTIONAL MATCH ((a) <- [r:REPLY] - (b:Opinion)) WITH a,collect(b) AS replies ORDER BY a.time RETURN a,replies")
+
+
 	.then(function(result){
             //var topicArray =[];
 	    var topicArray =[],
 		testArr = [],
 		printedArr = [];
 
-	    recursivePrint(result.records, 0, printedArr, testArr);
-
-	    testArr.forEach(function (result) {
-		console.log(result.argumenttext);
-	    });
-	    
-	    result.records.forEach(function(record){
-		//console.log(record._fields[1]);
-		topicArray.push({
-                    id: record._fields[0].identity.low,
-                    argumenttext: record._fields[0].properties.argumenttext,
-                    topic: record._fields[0].properties.topic
-		});
-
-            });
-	    
+	    recursivePrint(result.records, 0, printedArr, topicArray);
+	    	    	    
             res.render('topicspage',{
                 which_topic: req.params.name.replace(/_+/g, " "),
                 topics: topicArray
@@ -74,9 +59,10 @@ app.get('/topicspage/:name', function(req, res){
 
 });
 
+
 function recursivePrint(records, index, printedArr, topicArr) {
-    console.log(records.length);
-    console.log("printed array length: " + printedArr.length);
+//    console.log(records.length);
+//    console.log("printed array length: " + printedArr.length);
     console.log("index: " + index);
     //return if index is out of bounds
     if (index >= records.length) {
@@ -84,7 +70,7 @@ function recursivePrint(records, index, printedArr, topicArr) {
     }
     if (printedArr.indexOf(records[index]._fields[0].identity.low) > -1) {
 	recursivePrint(records,index+1,printedArr,topicArr);
-	//return;
+	return;
     }
     if (printedArr.length >= records.length) {
 	return;
@@ -93,18 +79,19 @@ function recursivePrint(records, index, printedArr, topicArr) {
     
     //return if it's already been "printed"
     
-
+    console.log("pushing " + index); 
     printedArr.push(records[index]._fields[0].identity.low);
     topicArr.push({
         id: records[index]._fields[0].identity.low,
         argumenttext: records[index]._fields[0].properties.argumenttext,
-        topic: records[index]._fields[0].properties.topic
+        topic: records[index]._fields[0].properties.topic,
+	isReply: records[index]._fields[0].properties.isReply
     });
 
     //if node has replies
     if (records[index]._fields[1].length > 0) {
 	var i;
-	for (i = 0; i < records[index]._fields[1].length; i++) {
+	for (i = records[index]._fields[1].length - 1; i >= 0 ; i--) {
 	    //find index of each reply
 	    var replyIndex = findIndex(records, records[index]._fields[1][i].identity.low);
 	    console.log("ReplyIndex: " + replyIndex);
@@ -115,7 +102,7 @@ function recursivePrint(records, index, printedArr, topicArr) {
 	}
     }
     //else go to next place in array
-    if (records[index]._fields[0].properties.isReply == "True"){
+    if (records[index]._fields[0].properties.isReply > 0){
 	return;
     }
     
@@ -123,6 +110,7 @@ function recursivePrint(records, index, printedArr, topicArr) {
     
 
 }
+
 
 function findIndex(records, item) {
     var i;
@@ -313,7 +301,7 @@ app.post('/opinion/add',function(req,res){
     var topic = req.body.topic;
 
     session
-	.run('CREATE(n:Opinion {argumenttext:{argumenttextParam},topic:{topicParam},isReply:"False"}) RETURN n.argumenttext', {argumenttextParam:argumenttext,topicParam:topic})
+	.run('CREATE(n:Opinion {argumenttext:{argumenttextParam},topic:{topicParam},isReply:0, time:timestamp()}) RETURN n.argumenttext', {argumenttextParam:argumenttext,topicParam:topic})
 	.then(function(result){
 	    res.redirect('/');
 	    session.close();
@@ -335,7 +323,7 @@ app.post('/opinion/addArgToTopic',function(req,res){
     var topic = req.body.Topic.replace(/_+/g, " ");
 
     session
-	.run('CREATE(n:Opinion {argumenttext:{argumenttextParam},topic:{topicParam},isReply:"False"}) RETURN n.argumenttext', {argumenttextParam:argumenttext,topicParam:topic})
+	.run('CREATE(n:Opinion {argumenttext:{argumenttextParam},topic:{topicParam},isReply:0, time:timestamp()}) RETURN n.argumenttext', {argumenttextParam:argumenttext,topicParam:topic})
 	.then(function(result){
 	    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
 	    session.close();
@@ -358,7 +346,7 @@ app.post('/opinion/addReply', function(req,res) {
     session
         .run("MATCH (initNode: Opinion {argumenttext:{initialArgParam}, topic:{topicParam}}) CREATE \
               (initNode) <- [r:REPLY] - (newNode: Opinion {argumenttext:{replyTextParam}, topic: \
-{topicParam},isReply:\"True\"}) CREATE (initNode) <- [rel: " + relType + " ] - (newNode)", {initialArgParam: initialArg, replyTextParam: replyText, topicParam: topic}) 
+{topicParam},isReply: initNode.isReply + 1, time:timestamp()}) CREATE (initNode) <- [rel: " + relType + " ] - (newNode)", {initialArgParam: initialArg, replyTextParam: replyText, topicParam: topic}) 
 	.then(function(result){
 	    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
 	    session.close();
