@@ -12,43 +12,46 @@
     </header>
 
     <main>
-        <div class="jumbotron">
-            <h1>Arguably</h1>
-            <p>Choose a topic from the list below or start your own!</p>
+      <div class="jumbotron">
+          <h1>Arguably</h1>
+          <p>Choose a topic from the list below or start your own!</p>
 
 
-            <h2> List of topics </h2>
-            <ul>
-              <!-- This lists and links the topics to their dynamically created web pagtes -->
-            <% topics.forEach(function(topic){ %>
+          <h2> List of topics </h2>
+          <ul>
+            <!-- This lists and links the topics to their dynamically created web pagtes -->
+	    <div class = "pre-scrollable">
+	      <div class = "well well-sm">
+           
+	    <% topics.forEach(function(topic){ %>
+	     <% var link = "/topicspage/" + topic.topic.replace(/ +/g, "_") %>
 
-            <% var link = "/topicspage/" + topic.topic.replace(/ +/g, "_") %>
+            <li> <a href= <%=link%> ><%= topic.topic %></a> </li>
+	      <% }) %>
+          </ul>
+	   
+	   
+           
 
-              <li> <a href= <%=link%> ><%= topic.topic %></a> </li>
-            <% }) %>
-            </ul>
+	  <form method = "post" action ="/opinion/add">
 
+	    <label> Suggest a new Topic</label>
+	    <br>
+	    <input type="text" name = "topic" placeholder = "Your Topic here"
+		   style = "height:120px; width:400px" required>
+	    <br>
 
+	    <label> Initial Argument </label>
+	    <br>
+	    <input type="text" name = "argumenttext" placeholder="Your Argument here" style =
+		   "height: 120px; width:400px" required>
+	    <br>
 
+	    <input type = "submit" value="Submit">
 
-
-
-<form method = "post" action ="/opinion/add">
-
-  <label> Suggest a new Topic</label>
-  <br>
-  <input type="text" name = "topic" placeholder = "Your Topic here" style = "height:120px; width:400px">
-    <br>
-
-	<label> Initial Argument </label>
-  <br>
-  <input type="text" name = "argumenttext" placeholder="Your Argument here" style = "height: 120px; width:400px">
-  <br>
-
-  <input type = "submit" value="Submit">
-
-</form>
-
+	  </form>
+	<br>
+	<a href="/download_all" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Download All Data</span></a>
 
 
 

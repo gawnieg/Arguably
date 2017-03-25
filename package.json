@@ -2,11 +2,11 @@
   "name": "node-ejs",
   "main": "server.js",
   "dependencies": {
+    "body-parser": "*",
     "ejs": "*",
     "express": "*",
-"body-parser":"*",
-"morgan":"*",
-"neo4j-driver":"*"
-
+    "morgan": "*",
+    "neo4j-driver": "*",
+    "nodemon": "^1.11.0"
   }
 }

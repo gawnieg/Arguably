@@ -1,49 +1,102 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <% include /partials/head %>
-</head>
-<body class="container">
+  </head>
+  <body class="container">
 
     <header>
-        <% include /partials/header %>
+      <% include /partials/header %>
     </header>
 
     <main>
 
-                <div class="jumbotron">
-                    <h1>Topic: <%= which_topic %></h1>
-                    <br />
+      <div class="jumbotron">
+        <h1>Topic: <%= which_topic %></h1>
+        <br />
 
-          <h2> Related propositions: </h2>
-          <br />
-	<ul>
+        <h2> Related propositions: </h2>
+        <br />
+	<ul style="list-style-type: none;">
 
-	<% topics.forEach(function(topic){ %>
+	  <% topics.forEach(function(topic){ %>
+	  
+	  
+<!--	  <% var padding = "margin-left: " + topic.isReply * 20 + "px;"%> -->
+		  
+	    <li> 
+	     <!-- <% console.log(padding) %> -->
+<% for(i = 0; i < topic.isReply; i++) { %>
+   <ul>
+     <% } %>
+     <div class="well well-sm">
+	      <%= topic.argumenttext %>
+	      <% var targetButton = "#demo_" + topic.id %>
+	      <% var targetDiv = "demo_" + topic.id %>
+	      <button type="button" class="btn btn-link"
+	      data-toggle="collapse" data-target= <%=targetButton %>>Reply</button>
+	        <div id= <%=targetDiv %> class="collapse">
+	      
+	    <form method = "post" action ="/opinion/addReply">
+	      
+	      <input type="text" name= "reply" size="25" required>
+	      <input type="hidden" class="topic" name="Topic" value = <%=which_topic.replace(/ +/g, "_")%> />
+	      <input type="hidden" class="initialArg"
+	      name="initialArg" value =
+		     <%=topic.argumenttext.replace(/ +/g, "_") %> />
+	      <br>
+	      <label> Select relationship </label>
+	      
+	      <select name = "relType">
+		<option value = "ATTACKS"> Attacks </option>
+		<option value = "SUPPORTS"> Supports </option>
+		<option value = "UNRELATED" selected> Unrelated </option>
+	      </select>
+	      
+	      
+	      <input type = "submit" value="Reply">
+	    </form>
+	    	</div>
+		</div>
+	    <% for(i = 0; i < topic.isReply; i++) { %>
+	       </ul>
+            <% } %>
 
-	  <li> <%= topic.argumenttext %> </li>
-	<% }) %>
+
+	    
+	    <% }) %>
+	    
+	  </li>
+	
 	</ul>
 
+	<form method = "post" action ="/opinion/addArgToTopic">
+
+	  <label> Continue the conversation!! </label>
+	  <br>
+	  <input type="text" name = "argumenttext" placeholder="Your Argument here"style="height:120px;	width:400px" required>
+	  <br>
+	  <input type="hidden" class="topic" name="Topic" value = <%=which_topic.replace(/ +/g, "_") %> />
+	  <input type = "submit" value="Submit">
+
+	</form>
 
 
 
-    <br /> <br />
+	<br /> <br />
 
-    <% var link = "/annotate_topic/" + which_topic.replace(/ +/g, "_") %>
-    <p><a href= <%=link%> > Click here to Annotate this Topic!</a>
+	<% var link = "/annotate_topic/" + which_topic.replace(/ +/g, "_") %>
+	<p><a href= <%=link%> > Click here to Annotate this Topic!</a>
 
 
-    </div>
+      </div>
 
 
     </main>
 
     <footer>
-        <% include /partials/footer %>
+      <% include /partials/footer %>
     </footer>
 
-</body>
+  </body>
 </html>
