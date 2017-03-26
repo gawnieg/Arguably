@@ -136,7 +136,7 @@ function findIndex(records, item) {
 
 
 // Dynamic annotate page creation
-var annotateArrayTwo =[];//Globally declared to be accesible to a function lower down.
+//Globally declared to be accesible to a function lower down.
 app.get('/annotate_topic/:name', function(req, res){
 
     session
@@ -145,7 +145,7 @@ app.get('/annotate_topic/:name', function(req, res){
 	.then(function(result){
 
             //var annotateArray =[]; //If don't want it to be global.
-            annotateArrayTwo =[];
+            var annotateArrayTwo =[];
             result.records.forEach(function(record){
 		//              console.log(record._fields[0].properties.argumenttext);
 		annotateArrayTwo.push({
@@ -156,6 +156,7 @@ app.get('/annotate_topic/:name', function(req, res){
 		});
 
             });
+            // redirect to page with name/ID/ID
             res.render('annotate_topic', {
 		which_topic: req.params.name.replace(/_+/g, " "),
   	        twoopinions: annotateArrayTwo
@@ -198,7 +199,6 @@ app.get('/contact_us', function(req, res) {
 //End of contact page section ---------------------------------------------------
 
 // Annotate page ------------------------------------------------------------------
-var annotateArray =[];//Globally declared to be accesible to a function lower down.
 app.get('/annotate',function(req,res){
 
     // var tagline = "Any code of your own that you haven't looked at for six or more months might as w";
@@ -210,8 +210,7 @@ app.get('/annotate',function(req,res){
 
 
 	.then(function(result){
-            //var annotateArray =[]; //If don't want it to be global.
-            annotateArray =[];
+            var annotateArray =[]; //If don't want it to be global.
             result.records.forEach(function(record){
 		annotateArray.push({
 		    id: record._fields[0].identity.low,
@@ -365,14 +364,15 @@ app.post('/opinion/addReply', function(req,res) {
 
 
 //HTTP POST FOR ADDING A RELATIONSHIP FROM ANNOTATE PAGE ------------------------
-app.post('/opinion/addrelationship',function(req,res){
+app.post('/opinion/addrelationship/:id1/:id2',function(req,res){
     var boxselection = req.body.select;
+    var id1 = req.params.id1;
+    var id2 = req.params.id2;
 
-
+    // Refactor this into it's own method like the others - ALSO NOTE THAT CAN USE SAME ONE FOR this
+    //AND THE OTHER ANNOTATE POST METHOD.
     session
-	.run("MATCH (node1:Opinion {argumenttext:{argumenttextParam1}}) \
-MATCH (node2:Opinion {argumenttext:{argumenttextParam2}}) CREATE (node1)-[relname:"+boxselection+"]->(node2)",
-             {argumenttextParam1:annotateArray[0].argumenttext,argumenttextParam2:annotateArray[1].argumenttext})
+  .run("MATCH (node1) WHERE id(node1) = "+id1+"  MATCH  (node2) WHERE id(node2) = "+id2+" CREATE (node1)-[relname:"+boxselection+"]->(node2)")
 
 	.then(function(result){
 	    res.redirect('/annotate');
@@ -382,19 +382,29 @@ MATCH (node2:Opinion {argumenttext:{argumenttextParam2}}) CREATE (node1)-[relnam
 	    console.log(err);
 	});
 
-    res.redirect('/annotate');
+    //REDIRECTS LIKE THIS ARE WRONG - CAUSING ERRORS IN CONSOLE LOG. JUST HAVE THE ONE ABOVE IN .THEN
+    //res.redirect('/annotate');
 });
 //END OF HTTP POST ADD RELATIONSHIP SECTION -----------------------------------
 
 
-//HTTP POST FOR ADDING A RELATIONSHIP FROM ANNOTATE PAGE ------------------------
-app.post('/opinion/addrelationship_byopinion',function(req,res){
+//HTTP POST FOR ADDING A RELATIONSHIP FROM ANNOTATE BY TOPIC PAGE ------------------------
+app.post('/opinion/addrelationship_byopinion/:topic/:id1/:id2',function(req,res){
     var boxselection = req.body.select;
-    var topic = annotateArrayTwo[0].topic.replace(/ +/g, "_");
+    var topic = req.params.topic.replace(/ +/g, "_");
+    var id1 = req.params.id1;
+    var id2 = req.params.id2;
 
+
+//	.run("MATCH (node1:Opinion {argumenttext:{argumenttextParam1}, topic:{topicParam}}) MATCH (node2:Opinion {argumenttext:{argumenttextParam2}, topic:{topicParam}}) \
+//CREATE (node1)-[relname:"+boxselection+"]->(node2)", {argumenttextParam1:annotateArrayTwo[0].argumenttext,argumenttextParam2:annotateArrayTwo[1].argumenttext,topicParam:annotateArrayTwo[0].topic})
+
+// Refactor this into it's own method like the others - ALSO NOTE THAT CAN USE SAME ONE FOR this
+//AND THE OTHER ANNOTATE POST METHOD.
     session
-	.run("MATCH (node1:Opinion {argumenttext:{argumenttextParam1}, topic:{topicParam}}) MATCH (node2:Opinion {argumenttext:{argumenttextParam2}, topic:{topicParam}}) \
-CREATE (node1)-[relname:"+boxselection+"]->(node2)", {argumenttextParam1:annotateArrayTwo[0].argumenttext,argumenttextParam2:annotateArrayTwo[1].argumenttext,topicParam:annotateArrayTwo[0].topic})
+	.run("MATCH (node1) WHERE id(node1) = "+id1+"  MATCH  (node2) WHERE id(node2) = "+id2+" CREATE (node1)-[relname:"+boxselection+"]->(node2)")
+
+
 
 	.then(function(result){
 	    res.redirect('/annotate_topic/' + topic);
@@ -403,10 +413,8 @@ CREATE (node1)-[relname:"+boxselection+"]->(node2)", {argumenttextParam1:annotat
 	.catch(function(err){
 	    console.log(err);
 	});
-
-    res.redirect('/annotate_topic/' + topic);
 });
-//END OF HTTP POST ADD RELATIONSHIP SECTION -----------------------------------
+//END OF HTTP POST ADD RELATIONSHIP BY TOPIC SECTION -----------------------------------
 
 
 //SECTION FOR HTTP POSTS NOW OVER. $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

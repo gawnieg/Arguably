@@ -1,6 +1,10 @@
 {
   "name": "node-ejs",
   "main": "server.js",
+  "scripts": {
+    "testInit": "jasmine init",
+    "test": "istanbul cover node_modules/jasmine/bin/jasmine.js || :"
+  },
   "dependencies": {
     "body-parser": "*",
     "ejs": "*",
