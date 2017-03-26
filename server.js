@@ -1,4 +1,4 @@
-//
+// testS
 // server.js
 // load the things we need
 
@@ -27,6 +27,14 @@ var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic('neo4j','goats'));
 var session = driver.session();
 
 
+// Importing utilities from other file
+const utils = require("./split/indexPageFunctions")
+// Make util functions available within the file
+const getAllTopics = utils.getAllTopics;
+const generateTopicArray = utils.generateTopicArray;
+
+const postUtils = require('./split/postUtilities');
+const addArgument = postUtils.addArgument;
 //INSIDE +'s: SECTION FOR "DECLARING" PAGES. ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //Dynamic topic page creation - james
@@ -45,7 +53,7 @@ app.get('/topicspage/:name', function(req, res){
 		printedArr = [];
 
 	    recursivePrint(result.records, 0, printedArr, topicArray);
-	    	    	    
+
             res.render('topicspage',{
                 which_topic: req.params.name.replace(/_+/g, " "),
                 topics: topicArray
@@ -76,10 +84,10 @@ function recursivePrint(records, index, printedArr, topicArr) {
 	return;
     }
 
-    
+
     //return if it's already been "printed"
-    
-    console.log("pushing " + index); 
+
+    console.log("pushing " + index);
     printedArr.push(records[index]._fields[0].identity.low);
     topicArr.push({
         id: records[index]._fields[0].identity.low,
@@ -105,9 +113,9 @@ function recursivePrint(records, index, printedArr, topicArr) {
     if (records[index]._fields[0].properties.isReply > 0){
 	return;
     }
-    
+
     else recursivePrint(records,index+1,printedArr,topicArr);
-    
+
 
 }
 
@@ -165,21 +173,12 @@ app.get('/annotate_topic/:name', function(req, res){
 // index page -----------------------------------------------------------------
 app.get('/',function(req,res){
 
-    session
-	.run('MATCH (n:Opinion) RETURN DISTINCT n.topic LIMIT 100')
-	.then(function(result){
-            var topicArray =[];
-            result.records.forEach(function(record){
-		topicArray.push({
-                    topic: record._fields[0]
-		});
-
-            });
-            res.render('pages/index',{
-  	        topics: topicArray
-            });
+  getAllTopics(session).then(generateTopicArray).then(function(topicArray) {
+    session.close();
+    res.render('pages/index',{
+          topics: topicArray
         })
-
+      })
 	.catch(function(err){
 	    console.log(err);
 	});
@@ -300,21 +299,20 @@ app.post('/opinion/add',function(req,res){
     var argumenttext = req.body.argumenttext;
     var topic = req.body.topic;
 
-    session
-	.run('CREATE(n:Opinion {argumenttext:{argumenttextParam},topic:{topicParam},isReply:0, time:timestamp()}) RETURN n.argumenttext', {argumenttextParam:argumenttext,topicParam:topic})
+    addArgument(session, argumenttext, topic)
 	.then(function(result){
+    	session.close();
 	    res.redirect('/');
-	    session.close();
 	})
 	.catch(function(err){
 	    console.log(err);
 	});
-
-    res.redirect('/');
 });
 //END OF HTTP POST ADD OPINION SECTION ------------------------------------------
 
 
+
+//HTTP POST FOR ADDING AN OPINION TO A PARTICULAR TOPIC PAGE  ------------------------------------
 app.post('/opinion/addArgToTopic',function(req,res){
     var argumenttext = req.body.argumenttext;
     //console.log(globalMostRecentTopic);
@@ -322,18 +320,19 @@ app.post('/opinion/addArgToTopic',function(req,res){
     //var topic = globalMostRecentTopic;
     var topic = req.body.Topic.replace(/_+/g, " ");
 
-    session
-	.run('CREATE(n:Opinion {argumenttext:{argumenttextParam},topic:{topicParam},isReply:0, time:timestamp()}) RETURN n.argumenttext', {argumenttextParam:argumenttext,topicParam:topic})
+
+    //ALSO REFACTORED TO USE THE QUERY FUNCTION IN THE POST UTILITIES FILE!!!!!!!!!!!!!!!!!!!!!!!
+    addArgument(session, argumenttext, topic)
 	.then(function(result){
-	    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
 	    session.close();
+      res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
 	})
 	.catch(function(err){
 	    console.log(err);
 	});
-
-    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
 });
+//END OF HTTP POST FOR ADDING AN OPINION TO A PARTICULAR TOPIC PAGE  ------------------------------------
+
 
 
 
@@ -342,11 +341,11 @@ app.post('/opinion/addReply', function(req,res) {
     var topic = req.body.Topic.replace(/_+/g, " ");
     var initialArg = req.body.initialArg.replace(/_+/g, " ");
     var relType = req.body.relType;
-    
+
     session
         .run("MATCH (initNode: Opinion {argumenttext:{initialArgParam}, topic:{topicParam}}) CREATE \
               (initNode) <- [r:REPLY] - (newNode: Opinion {argumenttext:{replyTextParam}, topic: \
-{topicParam},isReply: initNode.isReply + 1, time:timestamp()}) CREATE (initNode) <- [rel: " + relType + " ] - (newNode)", {initialArgParam: initialArg, replyTextParam: replyText, topicParam: topic}) 
+{topicParam},isReply: initNode.isReply + 1, time:timestamp()}) CREATE (initNode) <- [rel: " + relType + " ] - (newNode)", {initialArgParam: initialArg, replyTextParam: replyText, topicParam: topic})
 	.then(function(result){
 	    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
 	    session.close();
@@ -356,10 +355,10 @@ app.post('/opinion/addReply', function(req,res) {
 	});
 
     res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
-    
-    
+
+
     console.log(req.body);
-    
+
 
 });
 

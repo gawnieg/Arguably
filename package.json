@@ -8,5 +8,14 @@
     "morgan": "*",
     "neo4j-driver": "*",
     "nodemon": "^1.11.0"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.5",
+    "jasmine": "^2.5.3",
+    "jasmine-core": "^2.5.2",
+    "jasmine-reporters": "^2.0.0",
+    "karma": "^1.5.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.1.0"
   }
 }
