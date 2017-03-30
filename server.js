@@ -27,14 +27,35 @@ var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic('neo4j','goats'));
 var session = driver.session();
 
 
-// Importing utilities from other file
+
+
+
+// Importing code from other files
 const utils = require("./split/indexPageFunctions")
-// Make util functions available within the file
+// Make functions from imported file's code available within this file
 const getAllTopics = utils.getAllTopics;
 const generateTopicArray = utils.generateTopicArray;
 
-const postUtils = require('./split/postUtilities');
-const addArgument = postUtils.addArgument;
+
+const topicPostUtils = require('./split/topicPostUtilities');
+const addArgument = topicPostUtils.addArgument;
+
+
+const staticAnnotateUtils = require('./split/staticAnnotateFunctions');
+const getTwoNodesAnyTopic = staticAnnotateUtils.getTwoNodesAnyTopic;
+const makeTwoNodesArrayStatic = staticAnnotateUtils.makeTwoNodesArrayStatic;
+
+
+const dynamicAnnotateUtils = require('./split/dynamicAnnotateFunctions');
+const getTwoNodesSpecificTopic = dynamicAnnotateUtils.getTwoNodesSpecificTopic;
+const makeTwoNodesArrayDynamic = dynamicAnnotateUtils.makeTwoNodesArrayDynamic;
+
+
+const annotatePostUtils = require('./split/annotatePostUtilities');
+const addRelationship = annotatePostUtils.addRelationship;
+
+
+
 //INSIDE +'s: SECTION FOR "DECLARING" PAGES. ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //Dynamic topic page creation - james
@@ -130,46 +151,77 @@ function findIndex(records, item) {
     return -1;
 }
 
-
-
 // Dynamic topic page creation - james
 
 
-// Dynamic annotate page creation
-//Globally declared to be accesible to a function lower down.
-app.get('/annotate_topic/:name', function(req, res){
 
-    session
-	.run('MATCH (node1:Opinion {topic: \"'+req.params.name.replace(/_+/g, " ")+'\"}) OPTIONAL MATCH (node1)-[r]-(node2:Opinion) WITH node1, count(r) as rels RETURN node1 ORDER BY rels ASC LIMIT 2')
 
-	.then(function(result){
 
-            //var annotateArray =[]; //If don't want it to be global.
-            var annotateArrayTwo =[];
-            result.records.forEach(function(record){
-		//              console.log(record._fields[0].properties.argumenttext);
-		annotateArrayTwo.push({
-                    id: record._fields[0].identity.low,
-                    argumenttext: record._fields[0].properties.argumenttext,
-                    topic: record._fields[0].properties.topic
+// Annotate page (ALL TOPICS) ------------------------------------------------------------------
+app.get('/annotate',function(req,res){
 
-		});
 
-            });
-            // redirect to page with name/ID/ID
-            res.render('annotate_topic', {
-		which_topic: req.params.name.replace(/_+/g, " "),
-  	        twoopinions: annotateArrayTwo
-            });
-        })
+  getTwoNodesAnyTopic(session)
 
+
+  .then(makeTwoNodesArrayStatic)
+
+
+  .then(function(annotateArray) {
+      res.render('pages/annotate', {twoopinions: annotateArray});
+  })
 
 
 	.catch(function(err){
-            console.log(err);
+	   console.log(err);
 	});
+
+
 });
+
+
+// FACTORED OUT FUNCTIONS
+
+
+
+// End of annotate page (ALL TOPICS) section ---------------------------------------------------
+
+
+
+
+
+// Dynamic annotate page creation
+app.get('/annotate_topic/:name', function(req, res){
+
+  var nameForAnnotateTopic = req.params.name.replace(/_+/g, " ")
+
+
+  getTwoNodesSpecificTopic(session, nameForAnnotateTopic)
+
+
+  .then(makeTwoNodesArrayDynamic)
+
+
+  .then(function(annotateArrayTwo) {
+      res.render('annotate_topic', {which_topic: nameForAnnotateTopic, twoopinions: annotateArrayTwo});
+  })
+
+
+	.catch(function(err){
+	   console.log(err);
+	});
+
+
+});
+
+
+// FACTORED OUT FUNCTIONS
+
 // Dynamic annotate page creation - END
+
+
+
+
 
 // index page -----------------------------------------------------------------
 app.get('/',function(req,res){
@@ -186,62 +238,21 @@ app.get('/',function(req,res){
 });
 // End of index page section ----------------------------------
 
+
+
 //About page ------------------------------------------------------------------
 app.get('/about_us', function(req, res) {
     res.render('pages/about_us');
 });
 //End of about page section ---------------------------------------------------
 
+
+
 //Contact page ------------------------------------------------------------------
 app.get('/contact_us', function(req, res) {
     res.render('pages/contact_us');
 });
 //End of contact page section ---------------------------------------------------
-
-// Annotate page ------------------------------------------------------------------
-app.get('/annotate',function(req,res){
-
-    // var tagline = "Any code of your own that you haven't looked at for six or more months might as w";
-    // var somethingelse = "THIS IS ANOTHER VARIABLE";
-
-    session
-    //.run('MATCH (node1:Opinion)-[]-(node2:Opinion) WITH node1,count(node2) as rels RETURN node1 ORDER BY rels ASC LIMIT 2')
-	.run('MATCH (node1:Opinion) OPTIONAL MATCH (node1)-[r]-(node2:Opinion) WITH node1, count(r) as rels RETURN node1 ORDER BY rels ASC LIMIT 2')
-
-
-	.then(function(result){
-            var annotateArray =[]; //If don't want it to be global.
-            result.records.forEach(function(record){
-		annotateArray.push({
-		    id: record._fields[0].identity.low,
-		    argumenttext: record._fields[0].properties.argumenttext,
-		    topic: record._fields[0].properties.topic
-
-		});
-
-            });
-            res.render('pages/annotate',{
-		//tagline: tagline,
-		//somethingelse: somethingelse,
-		twoopinions: annotateArray
-            });
-        })
-
-
-	.catch(function(err){
-	    console.log(err);
-	});
-});
-
-// End of more page section ---------------------------------------------------
-
-// THIS MUST REMAIN THE LAST APP>GET & APP>USE PAGE ///
-
-// app.use(function(req, res, next){
-//     res.status(404).render('pages/404_error_template', {title: "Sorry, page not found"});
-// });
-
-//SECTION FOR "DECLARING" PAGES NOW OVER. ++++++++++++++++++++++++++++++++++++++
 
 
 
@@ -271,14 +282,22 @@ var Download_all_Array=[];
             console.log(err);
         });
 
-});//end of download all
+});
+//end of download all ----------------------------------------------
 
 
 
 
+// THIS MUST REMAIN THE LAST APP>GET & APP>USE PAGE ///
+
+// app.use(function(req, res, next){
+//     res.status(404).render('pages/404_error_template', {title: "Sorry, page not found"});
+// });
 
 
 
+
+//SECTION FOR "DECLARING" PAGES NOW OVER. ++++++++++++++++++++++++++++++++++++++
 
 
 
@@ -298,14 +317,21 @@ app.post('/opinion/add',function(req,res){
     var argumenttext = req.body.argumenttext;
     var topic = req.body.topic;
 
-    addArgument(session, argumenttext, topic)
+
+  addArgument(session, argumenttext, topic)
+
+
 	.then(function(result){
     	session.close();
 	    res.redirect('/');
 	})
+
+
 	.catch(function(err){
 	    console.log(err);
 	});
+
+
 });
 //END OF HTTP POST ADD OPINION SECTION ------------------------------------------
 
@@ -314,27 +340,83 @@ app.post('/opinion/add',function(req,res){
 //HTTP POST FOR ADDING AN OPINION TO A PARTICULAR TOPIC PAGE  ------------------------------------
 app.post('/opinion/addArgToTopic',function(req,res){
     var argumenttext = req.body.argumenttext;
-    //console.log(globalMostRecentTopic);
-    console.log(req.body);
-    //var topic = globalMostRecentTopic;
     var topic = req.body.Topic.replace(/_+/g, " ");
 
 
-    //ALSO REFACTORED TO USE THE QUERY FUNCTION IN THE POST UTILITIES FILE!!!!!!!!!!!!!!!!!!!!!!!
-    addArgument(session, argumenttext, topic)
+  addArgument(session, argumenttext, topic)
+
+
 	.then(function(result){
 	    session.close();
       res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
 	})
+
+
 	.catch(function(err){
 	    console.log(err);
 	});
+
+
 });
 //END OF HTTP POST FOR ADDING AN OPINION TO A PARTICULAR TOPIC PAGE  ------------------------------------
 
 
 
+//HTTP POST FOR ADDING A RELATIONSHIP FROM ANNOTATE PAGE ------------------------
+app.post('/opinion/addrelationship/:id1/:id2',function(req,res){
+    var boxselection = req.body.select;
+    var id1 = req.params.id1;
+    var id2 = req.params.id2;
 
+
+  addRelationship(session,boxselection,id1,id2)
+
+
+	.then(function(result){
+    	session.close();
+	    res.redirect('/annotate');
+
+	})
+
+
+	.catch(function(err){
+	    console.log(err);
+	});
+
+    //REDIRECTS LIKE THIS ARE WRONG - CAUSING ERRORS IN CONSOLE LOG. JUST HAVE THE ONE ABOVE IN .THEN
+    //res.redirect('/annotate');
+});
+//END OF HTTP POST ADD RELATIONSHIP SECTION -----------------------------------
+
+
+
+//HTTP POST FOR ADDING A RELATIONSHIP FROM ANNOTATE BY TOPIC PAGE ------------------------
+app.post('/opinion/addrelationship_byopinion/:topic/:id1/:id2',function(req,res){
+    var boxselection = req.body.select;
+    var id1 = req.params.id1;
+    var id2 = req.params.id2;
+
+    var topic = req.params.topic.replace(/ +/g, "_");
+
+
+  addRelationship(session,boxselection,id1,id2)
+
+
+	.then(function(result){
+    	session.close();
+	    res.redirect('/annotate_topic/' + topic);
+	})
+
+
+	.catch(function(err){
+	    console.log(err);
+	});
+});
+//END OF HTTP POST ADD RELATIONSHIP BY TOPIC SECTION -----------------------------------
+
+
+
+//HTTP POST FOR ADDING A REPLY ON A TOPIC PAGE ------------------------
 app.post('/opinion/addReply', function(req,res) {
     var replyText = req.body.reply;
     var topic = req.body.Topic.replace(/_+/g, " ");
@@ -360,66 +442,17 @@ app.post('/opinion/addReply', function(req,res) {
 
 
 });
+//END OF HTTP POST FOR ADDING A REPLY ON A TOPIC PAGE ------------------------
 
-
-
-//HTTP POST FOR ADDING A RELATIONSHIP FROM ANNOTATE PAGE ------------------------
-app.post('/opinion/addrelationship/:id1/:id2',function(req,res){
-    var boxselection = req.body.select;
-    var id1 = req.params.id1;
-    var id2 = req.params.id2;
-
-    // Refactor this into it's own method like the others - ALSO NOTE THAT CAN USE SAME ONE FOR this
-    //AND THE OTHER ANNOTATE POST METHOD.
-    session
-  .run("MATCH (node1) WHERE id(node1) = "+id1+"  MATCH  (node2) WHERE id(node2) = "+id2+" CREATE (node1)-[relname:"+boxselection+"]->(node2)")
-
-	.then(function(result){
-	    res.redirect('/annotate');
-	    session.close();
-	})
-	.catch(function(err){
-	    console.log(err);
-	});
-
-    //REDIRECTS LIKE THIS ARE WRONG - CAUSING ERRORS IN CONSOLE LOG. JUST HAVE THE ONE ABOVE IN .THEN
-    //res.redirect('/annotate');
-});
-//END OF HTTP POST ADD RELATIONSHIP SECTION -----------------------------------
-
-
-//HTTP POST FOR ADDING A RELATIONSHIP FROM ANNOTATE BY TOPIC PAGE ------------------------
-app.post('/opinion/addrelationship_byopinion/:topic/:id1/:id2',function(req,res){
-    var boxselection = req.body.select;
-    var topic = req.params.topic.replace(/ +/g, "_");
-    var id1 = req.params.id1;
-    var id2 = req.params.id2;
-
-
-//	.run("MATCH (node1:Opinion {argumenttext:{argumenttextParam1}, topic:{topicParam}}) MATCH (node2:Opinion {argumenttext:{argumenttextParam2}, topic:{topicParam}}) \
-//CREATE (node1)-[relname:"+boxselection+"]->(node2)", {argumenttextParam1:annotateArrayTwo[0].argumenttext,argumenttextParam2:annotateArrayTwo[1].argumenttext,topicParam:annotateArrayTwo[0].topic})
-
-// Refactor this into it's own method like the others - ALSO NOTE THAT CAN USE SAME ONE FOR this
-//AND THE OTHER ANNOTATE POST METHOD.
-    session
-	.run("MATCH (node1) WHERE id(node1) = "+id1+"  MATCH  (node2) WHERE id(node2) = "+id2+" CREATE (node1)-[relname:"+boxselection+"]->(node2)")
-
-
-
-	.then(function(result){
-	    res.redirect('/annotate_topic/' + topic);
-	    session.close();
-	})
-	.catch(function(err){
-	    console.log(err);
-	});
-});
-//END OF HTTP POST ADD RELATIONSHIP BY TOPIC SECTION -----------------------------------
 
 
 //SECTION FOR HTTP POSTS NOW OVER. $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
+
+
+
+
 //Listen on port 8080 (make site accessible!).
 app.listen(8080);
-console.log('8080 is the magic port');
+console.log('Site accessible on 8080');

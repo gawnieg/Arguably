@@ -8,6 +8,12 @@ var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic('neo4j','goats'));
 var session = driver.session();
 
 
+
+
+
+
+
+
 describe("GetTopicByName test", function() {
   var initialLength;
    beforeEach(function(done) {
@@ -44,5 +50,30 @@ describe("GetTopicByName test", function() {
 
       })
     });
+  });
+});
+
+
+
+
+
+describe("Build Result test", function() {
+  var a;
+  var testResult = {};
+  testResult.records=[];
+  var singleRecord = {
+    _fields : [
+      {
+          singleRecordTopic: "Some Topic"
+      }
+    ]
+  };
+  testResult.records.push(singleRecord)
+  it("take a result set and return an array", function() {
+    a = generateTopicArray(testResult)
+
+    //expect(a[0].id).toBe(1);
+    //expect(a[0].argumenttext).toBe("blah");
+    expect(a[0].topic.singleRecordTopic).toBe("Some Topic");
   });
 });
