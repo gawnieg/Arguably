@@ -262,7 +262,7 @@ app.get('/download_all',function(req,res){
     var DownloadAllArray=[];
     var replyArray = [];
     session
-        .run('MATCH (n:Opinion) OPTIONAL MATCH (n) <-[r:ATTACKS|SUPPORTS|UNRELATED]- (b:Opinion) RETURN DISTINCT ID(n) as id, n.argumenttext as argument, COLLECT(Type(r)) as type, b.argumenttext as reply ORDER BY id')
+        .run('MATCH (n:Opinion) OPTIONAL MATCH (n) <-[r:ATTACKS|SUPPORTS|UNRELATED]- (b:Opinion) RETURN DISTINCT ID(n) as id, n.argumenttext as argument, COLLECT(Type(r)) as type, b.argumenttext as reply, ID(b) as replyID ORDER BY id')
         .then(function(result){
 
 	    //if the first argument has a reply, push to reply array
@@ -270,6 +270,7 @@ app.get('/download_all',function(req,res){
 		var stats = getMode(result.records[0]);
 		replyArray.push({
 		    reply: result.records[0]._fields[3],
+		    replyID: result.records[0]._fields[4].low,
 		    relation: stats[0],
 		    agreement: stats[1]
 		});
@@ -285,6 +286,7 @@ app.get('/download_all',function(req,res){
 		    if (result.records[j]._fields[3] != null) {
 			replyArray.push({
 			    reply: result.records[j]._fields[3],
+			    replyID: result.records[j]._fields[4].low,
 			    relation: stats[0],
 			    agreement: stats[1]
 			});
@@ -293,6 +295,7 @@ app.get('/download_all',function(req,res){
 		    //push to data array
 		    DownloadAllArray.push({
 			argument: result.records[j-1]._fields[1],
+			id: result.records[j-1]._fields[0].low,
 			replies: replyArray
                     });
 		    //reset reply array and then add the reply for the current argument
@@ -300,6 +303,7 @@ app.get('/download_all',function(req,res){
 		    if (result.records[j]._fields[3] != null) {
 			replyArray.push({
 			    reply: result.records[j]._fields[3],
+			    replyID: result.records[j]._fields[4].low,
 			    relation: stats[0],
 			    agreement: stats[1]
 			});
@@ -307,6 +311,14 @@ app.get('/download_all',function(req,res){
 		}
 
             }
+	    //push last argument to data array
+	    DownloadAllArray.push({
+		argument: result.records[result.records.length-1]._fields[1],
+		id: result.records[result.records.length-1]._fields[0].low,
+		replies: replyArray
+            });
+
+	    
 	    var obj = {"records": DownloadAllArray};
 	    var json = JSON.stringify(obj, null, 4);//prep the data, this is essential
 	    var filename = 'all_data.json';
