@@ -12,7 +12,7 @@
     <main>
 
       <div class="jumbotron">
-        <h1>Topic: <%= which_topic %></h1>
+        <h1><%= which_topic %></h1>
         <br />
 
         <h2> Related propositions: </h2>
@@ -20,11 +20,11 @@
 	<ul style="list-style-type: none;">
 
 	  <% topics.forEach(function(topic){ %>
-	  
-	  
+
+
 <!--	  <% var padding = "margin-left: " + topic.isReply * 20 + "px;"%> -->
-		  
-	    <li> 
+
+	    <li>
 	     <!-- <% console.log(padding) %> -->
 <% for(i = 0; i < topic.isReply; i++) { %>
    <ul>
@@ -36,9 +36,9 @@
 	      <button type="button" class="btn btn-link"
 	      data-toggle="collapse" data-target= <%=targetButton %>>Reply</button>
 	        <div id= <%=targetDiv %> class="collapse">
-	      
+
 	    <form method = "post" action ="/opinion/addReply">
-	      
+
 	      <input type="text" name= "reply" size="25" required>
 	      <input type="hidden" class="topic" name="Topic" value = <%=which_topic.replace(/ +/g, "_")%> />
 	      <input type="hidden" class="initialArg"
@@ -46,14 +46,14 @@
 		     <%=topic.argumenttext.replace(/ +/g, "_") %> />
 	      <br>
 	      <label> Select relationship </label>
-	      
+
 	      <select name = "relType">
 		<option value = "ATTACKS"> Attacks </option>
 		<option value = "SUPPORTS"> Supports </option>
 		<option value = "UNRELATED" selected> Unrelated </option>
 	      </select>
-	      
-	      
+
+
 	      <input type = "submit" value="Reply">
 	    </form>
 	    	</div>
@@ -63,11 +63,11 @@
             <% } %>
 
 
-	    
+
 	    <% }) %>
-	    
+
 	  </li>
-	
+
 	</ul>
 
 	<form method = "post" action ="/opinion/addArgToTopic">
@@ -86,7 +86,7 @@
 	<br /> <br />
 
 	<% var link = "/annotate_topic/" + which_topic.replace(/ +/g, "_") %>
-	<p><a href= <%=link%> > Click here to Annotate this Topic!</a>
+	<p><a href= <%=link%> class = "button" > Click here to Annotate this Topic!</a>
 
 
       </div>
