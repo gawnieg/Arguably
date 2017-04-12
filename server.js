@@ -275,7 +275,7 @@ app.get('/download_all',function(req,res){
 		    agreement: stats[1]
 		});
 	    }
-	    
+
 	    for (j = 1; j < result.records.length; j++){
 
 		//get stats (mode and agreement)
@@ -318,7 +318,7 @@ app.get('/download_all',function(req,res){
 		replies: replyArray
             });
 
-	    
+
 	    var obj = {"records": DownloadAllArray};
 	    var json = JSON.stringify(obj, null, 4);//prep the data, this is essential
 	    var filename = 'all_data.json';
@@ -350,22 +350,22 @@ function getMode(record) {
 	} else {
 	    supportsCount++;
 	}
-	
+
     }
     var sum = unrelatedCount + attacksCount + supportsCount;
     //console.log(attacksCount + " " + supportsCount + " " + unrelatedCount);
-    
+
     if (unrelatedCount >= supportsCount && unrelatedCount >= attacksCount) {
 	return ["UNRELATED",unrelatedCount/sum];
-	
+
     } else if (supportsCount >= attacksCount && supportsCount >= unrelatedCount) {
 	return ["SUPPORTS",supportsCount/sum];
-	
+
     } else {
 	return ["ATTACKS",attacksCount/sum];
     }
-    
-    
+
+
 }
 
 //Doesn't actually seem to work - talk 2 da krew!!
@@ -539,7 +539,7 @@ app.post('/opinion/addReply', function(req,res) {
 	    console.log(err);
 	});
 
-    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
+    
 
 
     console.log(req.body);
