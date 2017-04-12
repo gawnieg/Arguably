@@ -92,7 +92,7 @@ app.get('/topicspage/:name', function(req, res){
 function recursivePrint(records, index, printedArr, topicArr) {
 //    console.log(records.length);
 //    console.log("printed array length: " + printedArr.length);
-    console.log("index: " + index);
+    //console.log("index: " + index);
     //return if index is out of bounds
     if (index >= records.length) {
 	return;
@@ -108,7 +108,7 @@ function recursivePrint(records, index, printedArr, topicArr) {
 
     //return if it's already been "printed"
 
-    console.log("pushing " + index);
+    //console.log("pushing " + index);
     printedArr.push(records[index]._fields[0].identity.low);
     topicArr.push({
         id: records[index]._fields[0].identity.low,
@@ -123,7 +123,7 @@ function recursivePrint(records, index, printedArr, topicArr) {
 	for (i = records[index]._fields[1].length - 1; i >= 0 ; i--) {
 	    //find index of each reply
 	    var replyIndex = findIndex(records, records[index]._fields[1][i].identity.low);
-	    console.log("ReplyIndex: " + replyIndex);
+	    //console.log("ReplyIndex: " + replyIndex);
 	    if (replyIndex >= 0) {
 		//print reply
 		recursivePrint(records, replyIndex, printedArr, topicArr);
@@ -502,8 +502,8 @@ app.post('/opinion/addrelationship_byopinion/:topic/:id1/:id2',function(req,res)
 
     var topic = req.params.topic.replace(/ +/g, "_");
 
-
-  addRelationship(session,boxselection,id1,id2)
+    
+    addRelationship(session,boxselection,id1,id2)
 
 
 	.then(function(result){
@@ -515,6 +515,7 @@ app.post('/opinion/addrelationship_byopinion/:topic/:id1/:id2',function(req,res)
 	.catch(function(err){
 	    console.log(err);
 	});
+    
 });
 //END OF HTTP POST ADD RELATIONSHIP BY TOPIC SECTION -----------------------------------
 
@@ -525,12 +526,13 @@ app.post('/opinion/addReply', function(req,res) {
     var replyText = req.body.reply;
     var topic = req.body.Topic.replace(/_+/g, " ");
     var initialArg = req.body.initialArg.replace(/_+/g, " ");
+    var initialID = require('neo4j-driver').v1.int(req.body.id);
     var relType = req.body.relType;
-
     session
-        .run("MATCH (initNode: Opinion {argumenttext:{initialArgParam}, topic:{topicParam}}) CREATE \
+        .run("MATCH (initNode: Opinion {argumenttext:{initialArgParam}, topic:{topicParam}}) WHERE ID(initNode) = {initialIDParam} CREATE \
               (initNode) <- [r:REPLY] - (newNode: Opinion {argumenttext:{replyTextParam}, topic: \
-{topicParam},isReply: initNode.isReply + 1, time:timestamp()}) CREATE (initNode) <- [rel: " + relType + " ] - (newNode)", {initialArgParam: initialArg, replyTextParam: replyText, topicParam: topic})
+{topicParam},isReply: initNode.isReply + 1, time:timestamp()}) CREATE (initNode) <- [rel: " + relType + " ] - (newNode)",
+	     {initialArgParam: initialArg, replyTextParam: replyText, topicParam: topic, initialIDParam: initialID})
 	.then(function(result){
 	    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
 	    session.close();

@@ -41,9 +41,9 @@
 
           <input type="text" name= "reply" size="25" required>
           <input type="hidden" class="topic" name="Topic" value = <%=which_topic.replace(/ +/g, "_")%> />
-          <input type="hidden" class="initialArg"
-          name="initialArg" value =
-             <%=topic.argumenttext.replace(/ +/g, "_") %> />
+          <input type="hidden" class="initialArg" name="initialArg"
+		 value = <%=topic.argumenttext.replace(/ +/g, "_") %> />
+	  <input type="hidden" class="id" name="id" value = <%=topic.id%> />
           <br>
           <label> Select relationship </label>
 
@@ -84,10 +84,34 @@
 
 
     <br /> <br />
-
+    <% console.log(topics.length) %>
+    <% if (topics.length >= 2) { %>
     <% var link = "/annotate_topic/" + which_topic.replace(/ +/g, "_") %>
     <p><a href= <%=link%> class = "button" > Click here to Annotate this Topic!</a>
+      <% } else {%>
+      <button type="button" class="btn btn-primary"
+	      data-toggle="modal" data-target="#myModal">
+	Click here to annotate the topic!
+      </button>
 
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+	    <div class="modal-body">
+	     There are not enough arguments in this topic to annotate,
+	     please create more!! 
+	    </div>
+	    <div class="modal-footer">
+	              <button type="button" class="btn btn-secondary"
+			      data-dismiss="modal">Close</button>
+	    </div>
+	  </div>
+	</div>
+	</div>
+
+
+      <% } %>
 
       </div>
 
