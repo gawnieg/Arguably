@@ -11,12 +11,13 @@
 
     <main>
 
-      <div class="jumbotron">
-        <h1>Topic: <%= which_topic %></h1>
+      <div class="jumbotron" id = "comments">
+        <h1><%= which_topic %></h1>
         <br />
 
         <h2> Related propositions: </h2>
         <br />
+
     <ul style="list-style-type: none;">
 
       <% topics.forEach(function(topic){ %>
@@ -78,6 +79,8 @@
       <br>
       <input type="hidden" class="topic" name="Topic" value = <%=which_topic.replace(/ +/g, "_") %> />
       <input type = "submit" value="Submit">
+
+      <a href="javascript://" id="helper" data-toggle="popover" title="Help Me!" data-content="This is the topic page. Read over other people's opinions and give your own. You can either make an entirely new point or reply to someone else."><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i></a>
 
     </form>
 
