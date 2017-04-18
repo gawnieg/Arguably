@@ -221,17 +221,15 @@ app.get('/annotate_topic/:name', function(req, res){
 
 
 
-
-
 // index page -----------------------------------------------------------------
 app.get('/index',function(req,res){
 
-  getAllTopics(session).then(generateTopicArray).then(function(topicArray) {
-    session.close();
-    res.render('pages/index',{
-          topics: topicArray
-        })
-      })
+    getAllTopics(session).then(generateTopicArray).then(function(topicArray) {
+	session.close();
+	res.render('pages/index',{
+	    topics: topicArray
+	})
+    })
 	.catch(function(err){
 	    console.log(err);
 	});
@@ -267,6 +265,7 @@ app.get('/contact_us', function(req, res) {
     res.render('pages/contact_us');
 });
 //End of contact page section ---------------------------------------------------
+
 
 
 
@@ -466,7 +465,7 @@ app.post('/opinion/addArgToTopic',function(req,res){
 
 	.then(function(result){
 	    session.close();
-      res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
+	    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
 	})
 
 
