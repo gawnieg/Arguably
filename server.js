@@ -221,38 +221,51 @@ app.get('/annotate_topic/:name', function(req, res){
 
 
 
-
-
 // index page -----------------------------------------------------------------
-app.get('/',function(req,res){
+app.get('/index',function(req,res){
 
-  getAllTopics(session).then(generateTopicArray).then(function(topicArray) {
-    session.close();
-    res.render('pages/index',{
-          topics: topicArray
-        })
-      })
+    getAllTopics(session).then(generateTopicArray).then(function(topicArray) {
+	session.close();
+	res.render('pages/index',{
+	    topics: topicArray
+	})
+    })
 	.catch(function(err){
 	    console.log(err);
 	});
 });
 // End of index page section ----------------------------------
 
-
-
-//About page ------------------------------------------------------------------
-app.get('/about_us', function(req, res) {
-    res.render('pages/about_us');
+//Main page ------------------------------------------------------------------
+app.get('/', function(req, res) {
+    res.render('pages/main');
 });
 //End of about page section ---------------------------------------------------
 
+//Data page ------------------------------------------------------------------
+app.get('/data_page', function(req, res) {
+    res.render('pages/data_page');
+});
+//End of about page section ---------------------------------------------------
 
+//Main page ------------------------------------------------------------------
+app.get('/main', function(req, res) {
+    res.render('pages/main');
+});
+//End of about page section ---------------------------------------------------
+
+//Easter_egg page ------------------------------------------------------------------
+app.get('/easter_egg', function(req, res) {
+    res.render('pages/easter_egg');
+});
+//End of about page section ---------------------------------------------------
 
 //Contact page ------------------------------------------------------------------
 app.get('/contact_us', function(req, res) {
     res.render('pages/contact_us');
 });
 //End of contact page section ---------------------------------------------------
+
 
 
 
@@ -452,7 +465,7 @@ app.post('/opinion/addArgToTopic',function(req,res){
 
 	.then(function(result){
 	    session.close();
-      res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
+	    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
 	})
 
 
