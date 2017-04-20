@@ -75,7 +75,7 @@ app.get('/topicspage/:name', function(req, res){
 
 	    recursivePrint(result.records, 0, printedArr, topicArray);
 
-            res.render('topicspage',{
+            res.render('pages/topicspage',{
                 which_topic: req.params.name.replace(/_+/g, " "),
                 topics: topicArray
             });
@@ -204,7 +204,7 @@ app.get('/annotate_topic/:name', function(req, res){
 
 
   .then(function(annotateArrayTwo) {
-      res.render('annotate_topic', {which_topic: nameForAnnotateTopic, twoopinions: annotateArrayTwo});
+      res.render('pages/annotate_topic', {which_topic: nameForAnnotateTopic, twoopinions: annotateArrayTwo});
   })
 
 
@@ -278,6 +278,8 @@ app.get('/download_all',function(req,res){
     session
         .run('MATCH (n:Opinion) OPTIONAL MATCH (n) <-[r:ATTACKS|SUPPORTS|UNRELATED]- (b:Opinion) RETURN DISTINCT ID(n) as id, n.argumenttext as argument, COLLECT(Type(r)) as type, b.argumenttext as reply, ID(b) as replyID ORDER BY id')
         .then(function(result){
+
+
 
 	    //if the first argument has a reply, push to reply array
 	    if (result.records[0]._fields[3] != null) {

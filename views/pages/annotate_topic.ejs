@@ -3,17 +3,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <% include /partials/head %>
+    <% include ../partials/head %>
 </head>
 <body class="container">
 
     <header>
-        <% include /partials/header %>
+        <% include ../partials/header %>
     </header>
 
     <main>
         <div class="jumbotron">
-            <h1>Annotation Page for topic: <%= which_topic %></h1>
+            <h1>Annotate: <%= which_topic %></h1>
             <p>Choose whether opinion 1 attacks, supports or is unrelated to opinion 2.</p>
 
 
@@ -25,6 +25,7 @@
               <li> <%= (index+1) %>) <%= opinion.argumenttext %> </li>
             <% }) %>
             </ul>
+
 
 
 
@@ -42,6 +43,8 @@
 
     <input type = "submit" value="Submit">
 
+    <a href="javascript://" id="helper" data-toggle="popover" title="Help Me!" data-content="This is the Annotate a topic page. Pick the annotation that you think best describes the relationship the first proposition has in reference to the second proposition."><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i></a>
+
 </form>
 
 
@@ -53,7 +56,7 @@
     </main>
 
     <footer>
-        <% include /partials/footer %>
+        <% include ../partials/footer %>
     </footer>
 
 
