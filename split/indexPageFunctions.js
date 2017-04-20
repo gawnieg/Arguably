@@ -2,7 +2,11 @@
 
 
 var getAllTopics = function(session) {
-  return session.run('MATCH (n:Opinion) RETURN DISTINCT n.topic LIMIT 100');
+  //return session.run('MATCH (n:Opinion) RETURN DISTINCT n.topic LIMIT 100');
+
+  //Altered for testing - original above.
+  return session.run('MATCH (n:Opinion) WHERE NOT n.topic = "TESTING124" RETURN DISTINCT n.topic LIMIT 100');
+
 }
 
 var generateTopicArray = function(result) {

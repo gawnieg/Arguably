@@ -1,0 +1,29 @@
+{
+  "nodes":[
+		{"name":"Martin Scorcese is a great director","group":1},
+		{"name":"MS is not a great director.  His films are mysoginistic","group":2},
+		{"name":"Raging Bull is still being copied to this day","group":2},
+		{"name":"Leonardo DiCaprio is not as good as Robert DeNiro","group":3},
+    {"name":"Martin Scorcese is a great director","group":1},
+		{"name":"MS is not a great director.  His films are mysoginistic","group":2},
+		{"name":"Raging Bull is still being copied to this day","group":2},
+		{"name":"Leonardo DiCaprio is not as good as Robert DeNiro","group":3},
+    {"name":"Martin Scorcese is a great director","group":1},
+		{"name":"MS is not a great director.  His films are mysoginistic","group":2},
+		{"name":"Raging Bull is still being copied to this day","group":2},
+		{"name":"Leonardo DiCaprio is not as good as Robert DeNiro","group":3},
+    {"name":"Martin Scorcese is a great director","group":1},
+		{"name":"MS is not a great director.  His films are mysoginistic","group":2},
+		{"name":"Raging Bull is still being copied to this day","group":2},
+		{"name":"Leonardo DiCaprio is not as good as Robert DeNiro","group":3},
+    {"name":"Martin Scorcese is a great director","group":1},
+		{"name":"MS is not a great director.  His films are mysoginistic","group":2},
+		{"name":"Raging Bull is still being copied to this day","group":2},
+		{"name":"Leonardo DiCaprio is not as good as Robert DeNiro","group":3}
+	],
+	"links":[
+		{"source":1,"target":0,"weight":1},
+		{"source":2,"target":0,"weight":3},
+    {"source":2,"target":1,"weight":2}
+	]
+}

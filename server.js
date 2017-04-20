@@ -199,7 +199,8 @@ app.get('/annotate_topic/:name', function(req, res){
   getTwoNodesSpecificTopic(session, nameForAnnotateTopic)
 
 
-  .then(makeTwoNodesArrayDynamic)
+  //.then(makeTwoNodesArrayDynamic)
+  .then(makeTwoNodesArrayStatic)
 
 
   .then(function(annotateArrayTwo) {
@@ -515,7 +516,7 @@ app.post('/opinion/addrelationship_byopinion/:topic/:id1/:id2',function(req,res)
 
     var topic = req.params.topic.replace(/ +/g, "_");
 
-    
+
     addRelationship(session,boxselection,id1,id2)
 
 
@@ -528,7 +529,7 @@ app.post('/opinion/addrelationship_byopinion/:topic/:id1/:id2',function(req,res)
 	.catch(function(err){
 	    console.log(err);
 	});
-    
+
 });
 //END OF HTTP POST ADD RELATIONSHIP BY TOPIC SECTION -----------------------------------
 

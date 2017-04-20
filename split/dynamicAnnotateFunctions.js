@@ -3,23 +3,4 @@ var getTwoNodesSpecificTopic = function(session,annotateTopicName) {
 }
 
 
-var makeTwoNodesArrayDynamic = function(result) {
-
-  var annotateArrayTwo =[];
-
-  result.records.forEach(function(record){
-      annotateArrayTwo.push({
-          id: record._fields[0].identity.low,
-          argumenttext: record._fields[0].properties.argumenttext,
-          topic: record._fields[0].properties.topic
-          });
-        });
-
-    return annotateArrayTwo;
-}
-
-
-
-
 module.exports.getTwoNodesSpecificTopic = getTwoNodesSpecificTopic;
-module.exports.makeTwoNodesArrayDynamic = makeTwoNodesArrayDynamic;

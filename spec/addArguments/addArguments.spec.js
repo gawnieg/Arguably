@@ -8,10 +8,11 @@ var session = driver.session();
 
 
 
-
-describe("Boo", function () {
-
-
+//Testing the function used to add arguments of new topics
+//from the topic selection page. Runs the function with a Testing
+//input then checks the database to see if the appropriate node
+//has been created.
+describe("AddArgument test", function () {
 
 
   // beforeEach(function(done) {
@@ -28,8 +29,6 @@ describe("Boo", function () {
   // });
 
 
-
-
   it("add a new argument", function () {
     postUtilities.addArgument(session, "I am for testing argument adding", "TESTING124")
     .then(function () {
@@ -42,7 +41,7 @@ describe("Boo", function () {
         //expect(result.records[0].properties.argumenttext).toBe("2");
 
         expect(result.records.length).toEqual(1);
-        console.log(result.records[0]._fields[0].properties.argumenttext);
+        //console.log(result.records[0]._fields[0].properties.argumenttext);
         expect(result.records[0]._fields[0].properties.argumenttext).toBe("I am for testing argument adding");
 
         //session.run('MATCH(node:Opinion {argumenttext:"I am for testing argument adding",topic:"TESTING124"})DELETE node')

@@ -3,6 +3,8 @@ var utils = require("../../split/indexPageFunctions")
 var getAllTopics = utils.getAllTopics;
 var generateTopicArray = utils.generateTopicArray;
 
+
+
 var neo4j = require('neo4j-driver').v1;
 var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic('neo4j','goats'));
 var session = driver.session();
@@ -10,11 +12,11 @@ var session = driver.session();
 
 
 
-
-
-
-
-describe("GetTopicByName test", function() {
+//Testing the database query that returns a distinct list of topics
+//in the app.get for the topic selection page. Does the query once,
+//adds one new topic (but two new nodes) and checks that the number
+//of topics returned only increases by 1 (and not 2).
+describe("DistinctGetTopicByName test", function() {
   var initialLength;
    beforeEach(function(done) {
      //Delete any existing nodes from the test topic first (shouldn't be any around but you never know).
@@ -29,7 +31,7 @@ describe("GetTopicByName test", function() {
       .then(done)//then(function() {console.log("IS THIS RUNNING?"); done()})
    });
 
-  it("take a session and return a result", function(done) {
+  it("Compares length of distinct list before and after adds", function(done) {
 	//Run the function
   var returnLength;
   getAllTopics(session).then(function (result) {
@@ -56,8 +58,11 @@ describe("GetTopicByName test", function() {
 
 
 
-
-describe("Build Result test", function() {
+//Testing the generateTopicArray function used to build an array from
+//neo4j query results in the app.get for the topic selection page.
+//Mimics a result output from a neo4j query, calls the generateTopicArray
+//function on it and checks the output.
+describe("Build TopicArray test", function() {
   var a;
   var testResult = {};
   testResult.records=[];
