@@ -41,9 +41,9 @@
         <form method = "post" action ="/opinion/addReply">
 
           <input type="text" name= "reply" size="25" required>
-          <input type="hidden" class="topic" name="Topic" value = <%=which_topic.replace(/ +/g, "_")%> />
+          <input type="hidden" class="topic" name="Topic" value = <%= encodeURIComponent(which_topic)%> />
           <input type="hidden" class="initialArg" name="initialArg"
-		 value = <%=topic.argumenttext.replace(/ +/g, "_") %> />
+		 value = <%= encodeURIComponent(topic.argumenttext) %> />
 	  <input type="hidden" class="id" name="id" value = <%=topic.id%> />
           <br>
           <label> Select relationship </label>
@@ -77,7 +77,7 @@
       <br>
       <textarea class="form-control" type="text" name = "argumenttext" placeholder="Your Argument here"style="height:120px; width:400px" required> </textarea>
       <br>
-      <input type="hidden" class="topic" name="Topic" value = <%=which_topic.replace(/ +/g, "_") %> />
+      <input type="hidden" class="topic" name="Topic" value = <%= encodeURIComponent(which_topic) %> />
       <input type = "submit" value="Submit">
 
       <a href="javascript://" id="helper" data-toggle="popover" title="Help Me!" data-content="This is the topic page. Read over other people's opinions and give your own. You can either make an entirely new point or reply to someone else."><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i></a>
@@ -89,7 +89,7 @@
     <br /> <br />
     <% console.log(topics.length) %>
     <% if (topics.length >= 2) { %>
-    <% var link = "/annotate_topic/" + which_topic.replace(/ +/g, "_") %>
+    <% var link = "/annotate_topic/" + encodeURIComponent(which_topic) %>
     <p><a href= <%=link%> class = "button" > Click here to Annotate this Topic!</a>
       <% } else {%>
       <button type="button" class="btn btn-primary"

@@ -31,7 +31,7 @@
 
 
 
-<form method = "post" action ="/opinion/addrelationship_byopinion/<%= which_topic %>/<%= twoopinions[0].id %>/<%= twoopinions[1].id %>">
+<form method = "post" action ="/opinion/addrelationship_byopinion/<%= encodeURIComponent(which_topic) %>/<%= twoopinions[0].id %>/<%= twoopinions[1].id %>">
   <label> Select relationship </label>
 
 <select name = "select">

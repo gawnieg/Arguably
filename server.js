@@ -64,7 +64,7 @@ const addRelationship = annotatePostUtils.addRelationship;
 app.get('/topicspage/:name', function(req, res){
 
     session
-        .run("MATCH (a:Opinion) WHERE a.topic = \""+req.params.name.replace(/_+/g," ") +  "\" OPTIONAL MATCH ((a) <- [r:REPLY] - (b:Opinion)) WITH a,collect(b) AS replies ORDER BY a.time RETURN a,replies")
+        .run("MATCH (a:Opinion) WHERE a.topic = \"" + decodeURIComponent(req.params.name) +  "\" OPTIONAL MATCH ((a) <- [r:REPLY] - (b:Opinion)) WITH a,collect(b) AS replies ORDER BY a.time RETURN a,replies")
 
 
 	.then(function(result){
@@ -76,7 +76,7 @@ app.get('/topicspage/:name', function(req, res){
 	    recursivePrint(result.records, 0, printedArr, topicArray);
 
             res.render('pages/topicspage',{
-                which_topic: req.params.name.replace(/_+/g, " "),
+                which_topic: decodeURIComponent(req.params.name),
                 topics: topicArray
             });
         })
@@ -193,7 +193,7 @@ app.get('/annotate',function(req,res){
 // Dynamic annotate page creation
 app.get('/annotate_topic/:name', function(req, res){
 
-  var nameForAnnotateTopic = req.params.name.replace(/_+/g, " ")
+  var nameForAnnotateTopic = decodeURIComponent(req.params.name);
 
 
   getTwoNodesSpecificTopic(session, nameForAnnotateTopic)
@@ -460,7 +460,7 @@ app.post('/opinion/add',function(req,res){
 //HTTP POST FOR ADDING AN OPINION TO A PARTICULAR TOPIC PAGE  ------------------------------------
 app.post('/opinion/addArgToTopic',function(req,res){
     var argumenttext = req.body.argumenttext;
-    var topic = req.body.Topic.replace(/_+/g, " ");
+    var topic = decodeURIComponent(req.body.Topic);
 
 
   addArgument(session, argumenttext, topic)
@@ -468,7 +468,7 @@ app.post('/opinion/addArgToTopic',function(req,res){
 
 	.then(function(result){
 	    session.close();
-	    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
+	    res.redirect('/topicspage/' + encodeURIComponent(topic));
 	})
 
 
@@ -516,8 +516,8 @@ app.post('/opinion/addrelationship_byopinion/:topic/:id1/:id2',function(req,res)
     var id1 = req.params.id1;
     var id2 = req.params.id2;
 
-    var topic = req.params.topic.replace(/ +/g, "_");
-
+    var topic = encodeURIComponent(req.params.topic);
+    console.log("topic in server: " + topic);
 
     addRelationship(session,boxselection,id1,id2)
 
@@ -540,8 +540,8 @@ app.post('/opinion/addrelationship_byopinion/:topic/:id1/:id2',function(req,res)
 //HTTP POST FOR ADDING A REPLY ON A TOPIC PAGE ------------------------
 app.post('/opinion/addReply', function(req,res) {
     var replyText = req.body.reply;
-    var topic = req.body.Topic.replace(/_+/g, " ");
-    var initialArg = req.body.initialArg.replace(/_+/g, " ");
+    var topic = decodeURIComponent(req.body.Topic);
+    var initialArg = decodeURIComponent(req.body.initialArg);
     var initialID = require('neo4j-driver').v1.int(req.body.id);
     var relType = req.body.relType;
     session
@@ -550,7 +550,7 @@ app.post('/opinion/addReply', function(req,res) {
 {topicParam},isReply: initNode.isReply + 1, time:timestamp()}) CREATE (initNode) <- [rel: " + relType + " ] - (newNode)",
 	     {initialArgParam: initialArg, replyTextParam: replyText, topicParam: topic, initialIDParam: initialID})
 	.then(function(result){
-	    res.redirect('/topicspage/' + topic.replace(/ +/g, "_"));
+	    res.redirect('/topicspage/' + encodeURIComponent(topic));
 	    session.close();
 	})
 	.catch(function(err){

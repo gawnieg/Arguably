@@ -24,7 +24,7 @@
 	      <div class = "well well-sm">
 
 	    <% topics.forEach(function(topic){ %>
-	     <% var link = "/topicspage/" + topic.topic.replace(/ +/g, "_") %>
+	     <% var link = "/topicspage/" + encodeURIComponent(topic.topic) %>
 
             <li> <a href= <%=link%> ><%= topic.topic %></a> </li>
 	      <% }) %>
