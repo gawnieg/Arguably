@@ -78,6 +78,8 @@ app.get('/topicspage/:name', function(req, res){
 		testArr = [],
 		printedArr = [];
 
+      //console.log(result.records);
+      //console.log(result.records[2]._fields[1]);
 	    recursivePrint(result.records, 0, printedArr, topicArray);
 
             res.render('pages/topicspage',{
