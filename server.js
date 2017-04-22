@@ -60,6 +60,13 @@ const recursivePrint = recursivePrintUtils.recursivePrint;
 const replyPostUtilities = require('./split/replyPostUtilities');
 const addReplyNode = replyPostUtilities.addReplyNode;
 
+const topicPageQuery = require('./split/topicPageQuery');
+const getAllNodesInTopic = topicPageQuery.getAllNodesInTopic;
+
+const downloadUtilities = require('./split/downloadUtilities');
+const getDownloadArray = downloadUtilities.getDownloadArray;
+const downloadQuery = downloadUtilities.downloadQuery;
+
 
 //INSIDE +'s: SECTION FOR "DECLARING" PAGES. ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -68,8 +75,11 @@ const addReplyNode = replyPostUtilities.addReplyNode;
 //var globalMostRecentTopic = "not configured";
 app.get('/topicspage/:name', function(req, res){
 
-    session
-        .run("MATCH (a:Opinion) WHERE a.topic = \"" + decodeURIComponent(req.params.name) +  "\" OPTIONAL MATCH ((a) <- [r:REPLY] - (b:Opinion)) WITH a,collect(b) AS replies ORDER BY a.time RETURN a,replies")
+    // session
+    //   .run("MATCH (a:Opinion) WHERE a.topic = \"" + decodeURIComponent(req.params.name) +  "\" OPTIONAL MATCH ((a) <- [r:REPLY] - (b:Opinion)) WITH a,collect(b) AS replies ORDER BY a.time RETURN a,replies")
+    var nameForTopic = decodeURIComponent(req.params.name);
+    getAllNodesInTopic(session, nameForTopic)
+
 
 
 	.then(function(result){
@@ -217,64 +227,14 @@ app.get('/download_all',function(req,res){
     //declare array for all data and a separate one for replies
     var DownloadAllArray=[];
     var replyArray = [];
-    session
-        .run('MATCH (n:Opinion) OPTIONAL MATCH (n) <-[r:ATTACKS|SUPPORTS|UNRELATED]- (b:Opinion) RETURN DISTINCT ID(n) as id, n.argumenttext as argument, COLLECT(Type(r)) as type, b.argumenttext as reply, ID(b) as replyID ORDER BY id')
+
+
+    downloadQuery(session)
+    //session.run('MATCH (n:Opinion) OPTIONAL MATCH (n) <-[r:ATTACKS|SUPPORTS|UNRELATED]- (b:Opinion) RETURN DISTINCT ID(n) as id, n.argumenttext as argument, COLLECT(Type(r)) as type, b.argumenttext as reply, ID(b) as replyID ORDER BY id')
+
+
         .then(function(result){
-
-
-
-	    //if the first argument has a reply, push to reply array
-	    if (result.records[0]._fields[3] != null) {
-		var stats = getMode(result.records[0]);
-		replyArray.push({
-		    reply: result.records[0]._fields[3],
-		    replyID: result.records[0]._fields[4].low,
-		    relation: stats[0],
-		    agreement: stats[1]
-		});
-	    }
-
-	    for (j = 1; j < result.records.length; j++){
-
-		//get stats (mode and agreement)
-		stats = getMode(result.records[j]);
-		//if the argument has the same id as the previous
-		if (result.records[j]._fields[0].low == result.records[j - 1]._fields[0].low) {
-		    //if it has replies add to the reply array for that argument
-		    if (result.records[j]._fields[3] != null) {
-			replyArray.push({
-			    reply: result.records[j]._fields[3],
-			    replyID: result.records[j]._fields[4].low,
-			    relation: stats[0],
-			    agreement: stats[1]
-			});
-		    }
-		} else {
-		    //push to data array
-		    DownloadAllArray.push({
-			argument: result.records[j-1]._fields[1],
-			id: result.records[j-1]._fields[0].low,
-			replies: replyArray
-                    });
-		    //reset reply array and then add the reply for the current argument
-		    replyArray = [];
-		    if (result.records[j]._fields[3] != null) {
-			replyArray.push({
-			    reply: result.records[j]._fields[3],
-			    replyID: result.records[j]._fields[4].low,
-			    relation: stats[0],
-			    agreement: stats[1]
-			});
-		    }
-		}
-
-            }
-	    //push last argument to data array
-	    DownloadAllArray.push({
-		argument: result.records[result.records.length-1]._fields[1],
-		id: result.records[result.records.length-1]._fields[0].low,
-		replies: replyArray
-            });
+          getDownloadArray(result,DownloadAllArray,replyArray);
 
 
 	    var obj = {"records": DownloadAllArray};
@@ -292,59 +252,6 @@ app.get('/download_all',function(req,res){
 
 });
 //end of download all ----------------------------------------------
-
-
-function getMode(record) {
-    //console.log(record);
-    var length = record._fields[2].length,
-	unrelatedCount = 0,
-	supportsCount = 0,
-	attacksCount = 0;
-    for (i = 0; i < length; i++) {
-	if (record._fields[2][i] == "UNRELATED") {
-	    unrelatedCount++;
-	} else if (record._fields[2][i] == "ATTACKS") {
-	    attacksCount++;
-	} else {
-	    supportsCount++;
-	}
-
-    }
-    var sum = unrelatedCount + attacksCount + supportsCount;
-    //console.log(attacksCount + " " + supportsCount + " " + unrelatedCount);
-
-    if (unrelatedCount >= supportsCount && unrelatedCount >= attacksCount) {
-	return ["UNRELATED",unrelatedCount/sum];
-
-    } else if (supportsCount >= attacksCount && supportsCount >= unrelatedCount) {
-	return ["SUPPORTS",supportsCount/sum];
-
-    } else {
-	return ["ATTACKS",attacksCount/sum];
-    }
-
-
-}
-
-//Doesn't actually seem to work - talk 2 da krew!!
-function fleissKappa(records) {
-    var n = sum(records),
-	k = records.length, // number of categories an opinion can be categorised as
-	prop = 0,
-	agreeExtent = 0;
-    //console.log(n + " " + k);
-    for (i = 0; i < k; i++) {
-	var tempProp = parseInt(records[i]._fields[1]);
-	prop += (tempProp * tempProp)/(n*n);
-	agreeExtent += (tempProp) * (tempProp);
-    }
-    //console.log(prop);
-    agreeExtent = (agreeExtent - n)/(n*(n-1));
-    //console.log(agreeExtent);
-    var kappa = (agreeExtent - prop)/(1-prop);
-
-    return kappa;
-}
 
 
 
@@ -508,3 +415,30 @@ app.post('/opinion/addReply', function(req,res) {
 //Listen on port 8080 (make site accessible!).
 app.listen(8080);
 console.log('Site accessible on 8080');
+
+
+
+
+
+
+
+
+// //Doesn't actually seem to work - talk 2 da krew!!
+// function fleissKappa(records) {
+//     var n = sum(records),
+// 	k = records.length, // number of categories an opinion can be categorised as
+// 	prop = 0,
+// 	agreeExtent = 0;
+//     //console.log(n + " " + k);
+//     for (i = 0; i < k; i++) {
+// 	var tempProp = parseInt(records[i]._fields[1]);
+// 	prop += (tempProp * tempProp)/(n*n);
+// 	agreeExtent += (tempProp) * (tempProp);
+//     }
+//     //console.log(prop);
+//     agreeExtent = (agreeExtent - n)/(n*(n-1));
+//     //console.log(agreeExtent);
+//     var kappa = (agreeExtent - prop)/(1-prop);
+//
+//     return kappa;
+// }

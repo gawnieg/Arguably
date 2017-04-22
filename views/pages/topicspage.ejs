@@ -15,6 +15,70 @@
         <h1><%= which_topic %></h1>
         <br />
 
+
+
+
+
+
+
+
+
+
+        <form method = "post" action ="/opinion/addArgToTopic">
+
+          <label> Start a new conversation under this topic! </label>
+          <br>
+          <textarea class="form-control" type="text" name = "argumenttext" placeholder="Your Argument here"style="height:120px; width:400px" required> </textarea>
+          <br>
+          <input type="hidden" class="topic" name="Topic" value = <%= encodeURIComponent(which_topic) %> />
+          <input type = "submit" value="Submit">
+
+          <a href="javascript://" id="helper" data-toggle="popover" title="Help Me!" data-content="This is the topic page. Read over other people's opinions and give your own. You can either make an entirely new point or reply to someone else."><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i></a>
+
+        </form>
+
+
+
+        <br /> <br />
+        <% console.log(topics.length) %>
+        <% if (topics.length >= 2) { %>
+        <% var link = "/annotate_topic/" + encodeURIComponent(which_topic) %>
+        <p><a href= <%=link%> class = "button" > Click here to Annotate this Topic!</a>
+          <% } else {%>
+          <button type="button" class="btn btn-primary"
+    	      data-toggle="modal" data-target="#myModal">
+    	Click here to annotate the topic!
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    	<div class="modal-dialog" role="document">
+    	  <div class="modal-content">
+    	    <div class="modal-body">
+    	     There are not enough arguments in this topic to annotate,
+    	     please create more!!
+    	    </div>
+    	    <div class="modal-footer">
+    	              <button type="button" class="btn btn-secondary"
+    			      data-dismiss="modal">Close</button>
+    	    </div>
+    	  </div>
+    	</div>
+    	</div>
+
+
+          <% } %>
+
+
+
+
+
+
+
+
+
+
+
         <h2> Related propositions: </h2>
         <br />
 
@@ -71,9 +135,9 @@
 
     </ul>
 
-    <form method = "post" action ="/opinion/addArgToTopic">
+    <!-- <form method = "post" action ="/opinion/addArgToTopic">
 
-      <label> Continue the conversation!! </label>
+      <label> Start a new conversation under this topic! </label>
       <br>
       <textarea class="form-control" type="text" name = "argumenttext" placeholder="Your Argument here"style="height:120px; width:400px" required> </textarea>
       <br>
@@ -95,10 +159,10 @@
       <button type="button" class="btn btn-primary"
 	      data-toggle="modal" data-target="#myModal">
 	Click here to annotate the topic!
-      </button>
+      </button> -->
 
       <!-- Modal -->
-      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 	  <div class="modal-content">
 	    <div class="modal-body">
@@ -114,7 +178,7 @@
 	</div>
 
 
-      <% } %>
+      <% } %> -->
 
       </div>
 

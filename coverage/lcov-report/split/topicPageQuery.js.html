@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for split/staticAnnotateFunctions.js</title>
+    <title>Code coverage report for split/topicPageQuery.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -16,13 +16,13 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../index.html">all files</a> / <a href="index.html">split/</a> staticAnnotateFunctions.js
+      <a href="../index.html">all files</a> / <a href="index.html">split/</a> topicPageQuery.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>9/9</span>
+        <span class='fraction'>3/3</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>3/3</span>
+        <span class='fraction'>1/1</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>9/9</span>
+        <span class='fraction'>3/3</span>
       </div>
     </div>
   </div>
@@ -51,40 +51,7 @@
 6
 7
 8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">2×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+9</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -92,32 +59,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var getTwoNodesAnyTopic = function(session) {
-  return session.run('MATCH (node1:Opinion) OPTIONAL MATCH (node1)-[r:ATTACKS|SUPPORTS|UNRELATED]-(node2:Opinion) WITH node1, count(r) as rels RETURN node1 ORDER BY rels ASC LIMIT 2');
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var getAllNodesInTopic = function(session,nameForTopic) {
+  return session.run("MATCH (a:Opinion) WHERE a.topic = \"" + nameForTopic + "\" OPTIONAL MATCH ((a) &lt;- [r:REPLY] - (b:Opinion)) WITH a,collect(b) AS replies ORDER BY a.time RETURN a,replies");
 }
 &nbsp;
 &nbsp;
-var makeTwoNodesArrayStatic = function(result) {
+    //   session.run("MATCH (a:Opinion) WHERE a.topic = \"" + decodeURIComponent(req.params.name) +  "\" OPTIONAL MATCH ((a) &lt;- [r:REPLY] - (b:Opinion)) WITH a,collect(b) AS replies ORDER BY a.time RETURN a,replies")
 &nbsp;
-  var annotateArray =[];
-&nbsp;
-  result.records.forEach(function(record){
-      annotateArray.push({
-          id: record._fields[0].identity.low,
-          argumenttext: record._fields[0].properties.argumenttext,
-          topic: record._fields[0].properties.topic
-          });
-        });
-&nbsp;
-    return annotateArray;
-}
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
-module.exports.getTwoNodesAnyTopic = getTwoNodesAnyTopic;
-module.exports.makeTwoNodesArrayStatic = makeTwoNodesArrayStatic;
+module.exports.getAllNodesInTopic = getAllNodesInTopic;
 &nbsp;</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->

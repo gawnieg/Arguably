@@ -1,5 +1,5 @@
 var getTwoNodesAnyTopic = function(session) {
-  return session.run('MATCH (node1:Opinion) OPTIONAL MATCH (node1)-[r]-(node2:Opinion) WITH node1, count(r) as rels RETURN node1 ORDER BY rels ASC LIMIT 2');
+  return session.run('MATCH (node1:Opinion) OPTIONAL MATCH (node1)-[r:ATTACKS|SUPPORTS|UNRELATED]-(node2:Opinion) WITH node1, count(r) as rels RETURN node1 ORDER BY rels ASC LIMIT 2');
 }
 
 

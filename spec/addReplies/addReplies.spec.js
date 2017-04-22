@@ -42,7 +42,7 @@ describe("AddArgument test", function () {
       //console.log(testingInitNodeID);
       replyPostUtilities.addReplyNode(session, "I am an initial node for testing reply adding", "I am for testing reply adding", "TESTING127", testingInitNodeID, "UNRELATED")
 
-      console.log("stuff still happening")
+      //console.log("stuff still happening")
 
     .then(function () {
 
