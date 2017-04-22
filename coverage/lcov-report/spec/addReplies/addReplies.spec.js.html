@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for spec/addReplies/addReplies.spec.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">spec/addReplies/</a> addReplies.spec.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">68.42% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>13/19</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">66.67% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>4/6</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">68.42% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>13/19</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const replyPostUtilities = require('../../split/replyPostUtilities');
+&nbsp;
+var neo4j = require('neo4j-driver').v1;
+var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic('neo4j','goats'));
+var session = driver.session();
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+//Testing the function used to add replies on a topic page. Runs
+//the function with a Testing input then checks the database to see
+//if the appropriate node has been created.
+describe("AddArgument test", function () {
+&nbsp;
+&nbsp;
+  // beforeEach(function(done) {
+  //   //Delete any existing nodes from the test topic first (shouldn't be any around but you never know).
+  //   Promise.all([session.run('MATCH(node:Opinion {topic:"TESTING124"})DELETE node'),
+  //    ,session.run('MATCH(node:Opinion {topic:"TESTING124"})DELETE node')])
+  //   .then(done)
+  // });
+  afterEach(function(done) {
+  //   //Delete test nodes from database.
+      Promise.all([session.run('MATCH(node:Opinion {argumenttext:"I am for testing reply adding",topic:"TESTING127"}) DELETE node'),
+       ,session.run('MATCH(node:Opinion {argumenttext:"I am an initial node for testing reply adding",topic:"TESTING127"}) DELETE node')])
+      .then(done)//then(function() {console.log("IS THIS RUNNING?"); done()})
+  });
+&nbsp;
+&nbsp;
+  it("add a new node and reply node", function () {
+    var testingInitNodeID;
+&nbsp;
+&nbsp;
+    session.run('CREATE(n:Opinion {argumenttext:\"I am an initial node for testing reply adding\",topic:\"TESTING127\",isReply:0, time:timestamp()}) RETURN n')
+&nbsp;
+    //.then(function() {
+    .then(function(result) {
+      //run function to add reply to test node
+      //console.log(result);
+      testingInitNodeID = result.records[0]._fields[0].identity.low;
+      //console.log(testingInitNodeID);
+      replyPostUtilities.addReplyNode(session, "I am an initial node for testing reply adding", "I am for testing reply adding", "TESTING127", testingInitNodeID, "UNRELATED")
+&nbsp;
+      console.log("stuff still happening")
+&nbsp;
+    .then(<span class="fstat-no" title="function not covered" >function () {</span>
+&nbsp;
+//Put in function that checks if we have added to DB
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      session.run('MATCH(node:Opinion {argumenttext:"I am for testing reply adding",topic:"TESTING127"}) RETURN node')</span>
+      .then(<span class="fstat-no" title="function not covered" >function (result) {</span>
+&nbsp;
+        //expect(result.records.length).toBe(2);
+        //console.log(result.records[0].properties.argumenttext);
+        //expect(result.records[0].properties.argumenttext).toBe("2");
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        console.log(result.records.length)</span>
+<span class="cstat-no" title="statement not covered" >        expect(result.records.length).toEqual(1);</span>
+<span class="cstat-no" title="statement not covered" >        console.log(result.records[0]._fields[0].properties.argumenttext);</span>
+<span class="cstat-no" title="statement not covered" >        expect(result.records[0]._fields[0].properties.argumenttext).toBe("I am for testing reply adding 222");</span>
+&nbsp;
+        //session.run('MATCH(node:Opinion {argumenttext:"I am for testing argument adding",topic:"TESTING124"})DELETE node')
+&nbsp;
+              //session.run('MATCH(node:Opinion {argumenttext:"I am for testing reply adding",topic:"TESTING127"}) MATCH(node2:Opinion {argumenttext:"I am an initial node for testing reply adding",topic:"TESTING127"}) DELETE node, node2')
+&nbsp;
+<span class="cstat-no" title="statement not covered" >              done(); </span>  //Async callback for beforeeach and aftereach - they're screwed up right now so just using line above.
+        })
+&nbsp;
+      })
+    })
+    })
+})
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Apr 22 2017 15:13:18 GMT+0100 (BST)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>
