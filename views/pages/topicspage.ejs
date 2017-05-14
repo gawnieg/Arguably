@@ -17,80 +17,16 @@
 
 
 
-
-
-
-
-
-
-
-        <form method = "post" action ="/opinion/addArgToTopic">
-
-          <label> Start a new conversation under this topic! </label>
-          <br>
-          <textarea class="form-control" type="text" name = "argumenttext" placeholder="Your Argument here"style="height:120px; width:400px" required> </textarea>
-          <br>
-          <input type="hidden" class="topic" name="Topic" value = <%= encodeURIComponent(which_topic) %> />
-          <input type = "submit" value="Submit">
-
-          <a href="javascript://" id="helper" data-toggle="popover" title="Help Me!" data-content="This is the topic page. Read over other people's opinions and give your own. You can either make an entirely new point or reply to someone else."><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i></a>
-
-        </form>
-
-
-
-        <br /> <br />
-        <% console.log(topics.length) %>
-        <% if (topics.length >= 2) { %>
-        <% var link = "/annotate_topic/" + encodeURIComponent(which_topic) %>
-        <p><a href= <%=link%> class = "button" > Click here to Annotate this Topic!</a>
-          <% } else {%>
-          <button type="button" class="btn btn-primary"
-    	      data-toggle="modal" data-target="#myModal">
-    	Click here to annotate the topic!
-          </button>
-
-          <!-- Modal -->
-          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    	<div class="modal-dialog" role="document">
-    	  <div class="modal-content">
-    	    <div class="modal-body">
-    	     There are not enough arguments in this topic to annotate,
-    	     please create more!!
-    	    </div>
-    	    <div class="modal-footer">
-    	              <button type="button" class="btn btn-secondary"
-    			      data-dismiss="modal">Close</button>
-    	    </div>
-    	  </div>
-    	</div>
-    	</div>
-
-
-          <% } %>
-
-
-
-
-
-
-
-
-
-
-
         <h2> Related propositions: </h2>
         <br />
 
-    <ul style="list-style-type: none;">
+   <!-- <ul style="list-style-type: none;"> -->
 
       <% topics.forEach(function(topic){ %>
 
 
-<!--      <% var padding = "margin-left: " + topic.isReply * 20 + "px;"%> -->
 
-        <li>
-         <!-- <% console.log(padding) %> -->
+        <li style="list-style-type: none;">
 <% for(i = 0; i < topic.isReply; i++) { %>
    <ul>
      <% } %>
@@ -135,54 +71,73 @@
 
     </ul>
 
-    <!-- <form method = "post" action ="/opinion/addArgToTopic">
+       <form method = "post" action ="/opinion/addArgToTopic">
 
-      <label> Start a new conversation under this topic! </label>
-      <br>
-      <textarea class="form-control" type="text" name = "argumenttext" placeholder="Your Argument here"style="height:120px; width:400px" required> </textarea>
-      <br>
-      <input type="hidden" class="topic" name="Topic" value = <%= encodeURIComponent(which_topic) %> />
-      <input type = "submit" value="Submit">
+          <label> Start a new conversation under this topic! </label>
+          <br>
+          <textarea class="form-control" type="text" name = "argumenttext" placeholder="Your Argument here"style="height:120px" required> </textarea>
+          <br>
+          <input type="hidden" class="topic" name="Topic" value = <%= encodeURIComponent(which_topic) %> />
+          <input type = "submit" value="Submit">
 
-      <a href="javascript://" id="helper" data-toggle="popover" title="Help Me!" data-content="This is the topic page. Read over other people's opinions and give your own. You can either make an entirely new point or reply to someone else."><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i></a>
+          <a href="javascript://" id="helper" data-toggle="popover" title="Help Me!" data-content="This is the topic page. Read over other people's opinions and give your own. You can either make an entirely new point or reply to someone else."><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i></a>
 
-    </form>
-
-
-
-    <br /> <br />
-    <% console.log(topics.length) %>
-    <% if (topics.length >= 2) { %>
-    <% var link = "/annotate_topic/" + encodeURIComponent(which_topic) %>
-    <p><a href= <%=link%> class = "button" > Click here to Annotate this Topic!</a>
-      <% } else {%>
-      <button type="button" class="btn btn-primary"
-	      data-toggle="modal" data-target="#myModal">
-	Click here to annotate the topic!
-      </button> -->
-
-      <!-- Modal -->
-      <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-	  <div class="modal-content">
-	    <div class="modal-body">
-	     There are not enough arguments in this topic to annotate,
-	     please create more!!
-	    </div>
-	    <div class="modal-footer">
-	              <button type="button" class="btn btn-secondary"
-			      data-dismiss="modal">Close</button>
-	    </div>
-	  </div>
-	</div>
-	</div>
+        </form>
 
 
-      <% } %> -->
+
+        <br /> <br />
+        
+        <% if (topics.length >= 2) { %>
+        <% var link = "/annotate_topic/" + encodeURIComponent(which_topic) %>
+        <p><a href= <%=link%> class="btn btn-primary btn-lg" > Click here to Annotate this Topic!</a>
+          <% } else {%>
+          <button type="button" class="btn btn-primary btn-lg"
+    	      data-toggle="modal" data-target="#myModal">
+    	Click here to annotate the topic!
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    	<div class="modal-dialog" role="document">
+    	  <div class="modal-content">
+    	    <div class="modal-body">
+    	     There are not enough arguments in this topic to annotate,
+    	     please create more!!
+    	    </div>
+    	    <div class="modal-footer">
+    	              <button type="button" class="btn btn-secondary"
+    			      data-dismiss="modal">Close</button>
+    	    </div>
+    	  </div>
+    	</div>
+    	</div>
+
+
+          <% } %>
+
 
       </div>
+      
 
+      <% if (topics.length > 0) { %>
+        <% var linkName = "/downloadTopic/" + encodeURIComponent(which_topic) %>
+        <a href= <%= linkName %> class="btn btn-success btn-lg"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> <span class="network-name">Download data for this topic  </span>  </a>
+      <% } else {%>
+          <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#myModal"> Download data for this topic </button>
 
+          <!-- Modal -->
+          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    	      <div class="modal-dialog" role="document">
+    	        <div class="modal-content">
+    	          <div class="modal-body"> There is no data in the database, please start some conversations!</div>
+    	          <div class="modal-footer">
+    	              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    	          </div>
+    	        </div>
+    	      </div>
+    	    </div>
+          <% } %>
     </main>
 
     <footer>

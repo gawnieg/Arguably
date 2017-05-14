@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname,'public')));
 
 //Neo4j Driver
-var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic('neo4j','goats'));
+var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic('neo4j','Different1'));
 var session = driver.session();
 
 var d3 = require('d3');
@@ -64,6 +64,7 @@ const topicPageQuery = require('./split/topicPageQuery');
 const getAllNodesInTopic = topicPageQuery.getAllNodesInTopic;
 
 const downloadUtilities = require('./split/downloadUtilities');
+const downloadQueryTopic = downloadUtilities.downloadQueryTopic;
 const getDownloadArray = downloadUtilities.getDownloadArray;
 const downloadQuery = downloadUtilities.downloadQuery;
 
@@ -75,8 +76,6 @@ const downloadQuery = downloadUtilities.downloadQuery;
 //var globalMostRecentTopic = "not configured";
 app.get('/topicspage/:name', function(req, res){
 
-    // session
-    //   .run("MATCH (a:Opinion) WHERE a.topic = \"" + decodeURIComponent(req.params.name) +  "\" OPTIONAL MATCH ((a) <- [r:REPLY] - (b:Opinion)) WITH a,collect(b) AS replies ORDER BY a.time RETURN a,replies")
     var nameForTopic = decodeURIComponent(req.params.name);
     getAllNodesInTopic(session, nameForTopic)
 
@@ -88,8 +87,6 @@ app.get('/topicspage/:name', function(req, res){
 		testArr = [],
 		printedArr = [];
 
-      //console.log(result.records);
-      //console.log(result.records[2]._fields[1]);
 	    recursivePrint(result.records, 0, printedArr, topicArray);
 
             res.render('pages/topicspage',{
@@ -221,7 +218,6 @@ app.get('/contact_us', function(req, res) {
 
 
 
-
 //SECTION FOR DOWNLOAD ALL BUTTON ON HOMEPAGE
 app.get('/download_all',function(req,res){
     //declare array for all data and a separate one for replies
@@ -230,20 +226,23 @@ app.get('/download_all',function(req,res){
 
 
     downloadQuery(session)
-    //session.run('MATCH (n:Opinion) OPTIONAL MATCH (n) <-[r:ATTACKS|SUPPORTS|UNRELATED]- (b:Opinion) RETURN DISTINCT ID(n) as id, n.argumenttext as argument, COLLECT(Type(r)) as type, b.argumenttext as reply, ID(b) as replyID ORDER BY id')
-
 
         .then(function(result){
-          getDownloadArray(result,DownloadAllArray,replyArray);
+            var obj;
+            console.log(result.records.length)
+            if (result.records.length == 0) {
+                obj = {"records": []};
+            } else {
+                getDownloadArray(result,DownloadAllArray,replyArray);
+                obj = {"records": DownloadAllArray};
+            }
 
-
-	    var obj = {"records": DownloadAllArray};
-	    var json = JSON.stringify(obj, null, 4);//prep the data, this is essential
-	    var filename = 'all_data.json';
-	    var mimetype = 'application/json';
-	    res.setHeader('Content-Type', mimetype);
-	    res.setHeader('Content-disposition','attachment; filename='+filename);
-	    res.send( json );//send the file to the client
+            var json = JSON.stringify(obj, null, 4);//prep the data, this is essential
+            var filename = 'all_data.json';
+            var mimetype = 'application/json';
+            res.setHeader('Content-Type', mimetype);
+            res.setHeader('Content-disposition','attachment; filename='+filename);
+            res.send( json );//send the file to the client
         })
 
         .catch(function(err){
@@ -254,6 +253,36 @@ app.get('/download_all',function(req,res){
 //end of download all ----------------------------------------------
 
 
+
+//topic specific download buttons
+app.get('/downloadTopic/:name',function(req,res){
+
+    //declare array for all data and a separate one for replies
+    var DownloadAllArray=[];
+    var replyArray = [];
+    var topicName = decodeURIComponent(req.params.name);
+
+    downloadQueryTopic(session, topicName)
+
+        .then(function(result){
+            getDownloadArray(result,DownloadAllArray,replyArray);
+
+
+            var obj = {"records": DownloadAllArray};
+            var json = JSON.stringify(obj, null, 4);//prep the data, this is essential
+            var filename = 'data.json';
+            var mimetype = 'application/json';
+            res.setHeader('Content-Type', mimetype);
+            res.setHeader('Content-disposition','attachment; filename='+filename);
+            res.send( json );//send the file to the client
+        })
+
+        .catch(function(err){
+            console.log(err);
+        });
+
+});
+//end of topic specific download ----------------------------------------------
 
 
 
