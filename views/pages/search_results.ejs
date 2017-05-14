@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ../partials/head %>
+  </head>
+ <body class="container">
+
+    <header>
+      <% include ../partials/header %>
+    </header>
+
+    <main>
+      <% if (searchArray.length == 0) { %>
+        <h2>Oops, no results for that topic. Please check your spelling or search for something different! </h2>
+      <% } else { %>
+      <h2> Search results for: <%= decodeURIComponent(searchRequest) %> </h2>
+      <br><br>
+      <ul style="list-style-type: none; padding: 0">
+        <!-- This lists and links the topics to their dynamically created web pagtes -->
+  <div class = "pre-scrollable">
+    <div class = "well well-sm">
+
+  <% searchArray.forEach(function(topic){ %>
+   <% var link = "/topicspage/" + encodeURIComponent(topic.topic) %>
+
+        <li> <a href= <%=link%> ><%= topic.topic %></a> </li>
+    <% }) %>
+      </ul>
+
+    <% } %>
+    </main>
+
+    <footer>
+      <% include ../partials/footer %>
+    </footer>
+
+  </body>
+</html>

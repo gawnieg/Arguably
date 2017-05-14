@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname,'public')));
 
 //Neo4j Driver
-var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic('neo4j','Different1'));
+var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic('neo4j','goats'));
 var session = driver.session();
 
 var d3 = require('d3');
@@ -68,6 +68,9 @@ const downloadQueryTopic = downloadUtilities.downloadQueryTopic;
 const getDownloadArray = downloadUtilities.getDownloadArray;
 const downloadQuery = downloadUtilities.downloadQuery;
 
+const searchUtilities = require('./split/searchUtilities');
+const getSearchResults = searchUtilities.getSearchResults;
+const getSearchArray = searchUtilities.getSearchArray;
 
 //INSIDE +'s: SECTION FOR "DECLARING" PAGES. ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -174,7 +177,7 @@ app.get('/annotate_topic/:name', function(req, res){
 // index page -----------------------------------------------------------------
 app.get('/index',function(req,res){
 
-    getAllTopics(session).then(generateTopicArray).then(function(topicArray) {
+  getAllTopics(session).then(generateTopicArray).then(function(topicArray) {
 	session.close();
 	res.render('pages/index',{
 	    topics: topicArray
@@ -282,9 +285,43 @@ app.get('/downloadTopic/:name',function(req,res){
         });
 
 });
+
+app.get('/search_results/:name', function(req,res){
+    var searchRequest = decodeURIComponent(req.params.name);
+    console.log(searchRequest);
+    getSearchResults(session,searchRequest).then(getSearchArray)
+    .then(function(searchArray){
+        res.render('pages/search_results', {
+          searchRequest: searchRequest,
+          searchArray: searchArray
+        });
+    })
+    .catch(function(err){
+  	    console.log(err);
+  	});
+
+})
+
 //end of topic specific download ----------------------------------------------
 
+app.post('/search', function(req,res){
+    //var searchResultArray = [];
+    var searchRequest = req.body.request;
 
+
+
+        //var searchArray = [];
+        res.redirect('/search_results/' + encodeURIComponent(searchRequest));
+        //session.close();
+
+        //res.redirect('/index');
+    //})
+
+    //.catch(function(err){
+    //  console.log(err);
+    //})
+
+})
 
 // THIS MUST REMAIN THE LAST APP>GET & APP>USE PAGE ///
 

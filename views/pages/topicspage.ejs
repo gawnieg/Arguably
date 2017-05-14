@@ -37,7 +37,7 @@
           <button type="button" class="btn btn-link"
           data-toggle="collapse" data-target= <%=targetButton %>>Reply</button>
             <div id= <%=targetDiv %> class="collapse">
-
+              
         <form method = "post" action ="/opinion/addReply">
 
           <input type="text" name= "reply" size="25" required>
@@ -87,7 +87,7 @@
 
 
         <br /> <br />
-        
+
         <% if (topics.length >= 2) { %>
         <% var link = "/annotate_topic/" + encodeURIComponent(which_topic) %>
         <p><a href= <%=link%> class="btn btn-primary btn-lg" > Click here to Annotate this Topic!</a>
@@ -118,7 +118,7 @@
 
 
       </div>
-      
+
 
       <% if (topics.length > 0) { %>
         <% var linkName = "/downloadTopic/" + encodeURIComponent(which_topic) %>
