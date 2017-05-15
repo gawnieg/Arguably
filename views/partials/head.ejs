@@ -25,6 +25,7 @@
 <script>
 $(document).ready(function(){
     $('[data-toggle="popover"]').popover();
+
 });
 </script>
 
@@ -72,7 +73,7 @@ $(document).ready(function(){
 .navbar-nav .active li a {
     color: red;
 }
-    
+
 
       .link {
       stroke: #aaa;
@@ -92,14 +93,38 @@ $(document).ready(function(){
 
 <<<<<<< HEAD
 =======
-.popover {
-      width: 200px;
+/*.popover {
+      max-width: 400px;
+}*/
+
+/*.popover{
+    display:block !important;
+    max-width: 400px!important;
+    width:auto;
 }
 
-/* Popover Body */
-.popover-content {
+/* Popover Body
+.popover.content{
+    display:block !important;
+    max-width: 400px!important;
+    width:auto;
+}*/
 
+/*Navbar fix */
+.navbar-form {
+    margin-top: 15px;
+    margin-bottom: 10px;
 }
+
+.form-control.searchbar{
+    color: white;
+    background-color:#1a1a1a !important;
+}
+
+.form-control.searchbar::-webkit-input-placeholder { color: white; }
+.form-control.searchbar:-moz-placeholder { color: white; }
+.form-control.searchbar::-moz-placeholder { color: white; }
+.form-control.searchbar:-ms-input-placeholder { color: white; }
 
 .jumbotron {position:relative;}
 #helper {position:absolute; bottom:5px; right:5px;}
