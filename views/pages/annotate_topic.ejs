@@ -13,18 +13,30 @@
 
     <main>
         <div class="jumbotron">
-            <h1>Annotate: <%= which_topic %></h1>
-            <p>Choose whether opinion 1 attacks, supports or is unrelated to opinion 2.</p>
+            <h1>Annotate topic: <%= which_topic %></h1>
+            <% if (twoopinions.length >= 2) { %>
+          </br><p><i><small>Read the two propositions below and choose the option that best describes the relationship between proposition one and proposition two.</small></i></p>
 
 
 
 
-            <h2> Opinions: </h2>
+
+            <!-- <h2> Opinions: </h2>
             <ul style="list-style-type:none">
             <% twoopinions.forEach(function(opinion,index){ %>
               <li> <%= (index+1) %>) <%= opinion.argumenttext %> </li>
             <% }) %>
-            </ul>
+            </ul> -->
+
+            <p>The relationship of Proposition 1: </p>
+
+            <p class="lead" ><mark><%= twoopinions[0].argumenttext %></mark></p>
+
+            <p>towards Proposition 2: </p>
+
+            <p class="lead"><mark><%= twoopinions[1].argumenttext %></mark></p>
+
+            <p>is best described as </p>
 
 
 
@@ -44,6 +56,11 @@
     <input type = "submit" value="Submit">
 
     <a href="javascript://" id="helper" data-toggle="popover" title="Help Me!" data-content="This is the Annotate a topic page. Pick the annotation that you think best describes the relationship the first proposition has in reference to the second proposition."><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i></a>
+    <% } else { %>
+        <br> <br>
+        <p>Oops, there aren't enough opinions to annotate yet! Please go back to <a href="/index">the main page</a> and start some conversations! </p>
+
+    <% } %>
 
 </form>
 

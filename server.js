@@ -213,6 +213,12 @@ app.get('/easter_egg', function(req, res) {
 });
 //End of about page section ---------------------------------------------------
 
+//graphical_view page ------------------------------------------------------------------
+app.get('/graphical_view', function(req, res) {
+    res.render('pages/graphical_view');
+});
+//End of about page section ---------------------------------------------------
+
 //Contact page ------------------------------------------------------------------
 app.get('/contact_us', function(req, res) {
     res.render('pages/contact_us');
