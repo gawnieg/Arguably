@@ -123,6 +123,11 @@ app.get('/signup', function(req, res) {
      failureFlash : true // allow flash messages
  }));
 
+ app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+});
+
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
