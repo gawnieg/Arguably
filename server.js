@@ -159,7 +159,7 @@ app.get('/topicspage/:name', function(req, res){
 
 
 // Annotate page (ALL TOPICS) ------------------------------------------------------------------
-app.get('/annotate',function(req,res){
+app.get('/annotate',isLoggedIn,function(req,res){
 
 
   getTwoNodesAnyTopic(session)
