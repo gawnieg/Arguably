@@ -1,16 +1,32 @@
 // testS
 // server.js
 // load the things we need
+var graphenedbURL = process.env.GRAPHENEDB_BOLT_URL||'bolt://hobby-cmmcbflhoeaggbkemgjdphpl.dbs.graphenedb.com:24786';
+var graphenedbUser = process.env.GRAPHENEDB_BOLT_USER||'app68637605-SiF9LC';
+var graphenedbPass = process.env.GRAPHENEDB_BOLT_PASSWORD||'b.xP9txs0iJHbd.hWoV5mFVKkVlR2SH';
+var port = process.env.PORT || 8080;
 
 //This is to bring express - app is the express object which links us to express
 var express = require('express'); // - express is the module name
 var app = express(); // this is the express app which gives us access to ex[presses' functionality
 //express() fires the express function giving us access
 
+var mongoose = require('mongoose');
+var passport = require('passport');
+var flash    = require('connect-flash');
+
+var morgan       = require('morgan');
+var cookieParser = require('cookie-parser');
+var session1      = require('express-session');
+var configDB = require('./config/database.js');
 var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var neo4j = require('neo4j-driver').v1;
+
+mongoose.connect(configDB.url); // connect to our databas
+ require('./config/passport')(passport);
+
 
 // set the view engine to ejs - now by default it will look for views in the view folder
 app.set('view engine', 'ejs');
@@ -18,12 +34,22 @@ app.set('views',path.join(__dirname,'views'));
 
 //standard middleware
 app.use(logger('dev'));
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname,'public')));
 
+// required for passport
+app.use(session1({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+
+
 //Neo4j Driver
-var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic('neo4j','goats'));
+//var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic('neo4j','goats'));
+var driver = neo4j.driver(graphenedbURL, neo4j.auth.basic(graphenedbUser, graphenedbPass));
 var session = driver.session();
 
 var d3 = require('d3');
@@ -73,6 +99,29 @@ const getSearchResults = searchUtilities.getSearchResults;
 const getSearchArray = searchUtilities.getSearchArray;
 
 //INSIDE +'s: SECTION FOR "DECLARING" PAGES. ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+app.post('/login', passport.authenticate('local-login', {
+    successRedirect : '/main', // redirect to the secure profile section
+    failureRedirect : '/login', // redirect back to the signup page if there is an error
+    failureFlash : true // allow flash messages
+}));
+app.get('/login', function(req, res) {
+
+    // render the page and pass in any flash data if it exists
+    res.render('pages/login.ejs', { message: req.flash('loginMessage') });
+});
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}
+
 
 //Dynamic topic page creation - james
 
@@ -485,7 +534,7 @@ app.post('/opinion/addReply', function(req,res) {
 
 
 //Listen on port 8080 (make site accessible!).
-app.listen(8080);
+app.listen(port);
 console.log('Site accessible on 8080');
 
 
