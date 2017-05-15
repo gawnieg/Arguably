@@ -406,7 +406,7 @@ app.post('/search', function(req,res){
 //INSIDE $'s: SECTION FOR HTTP POST ACTIONS TO BE CALLED FROM PAGES. $$$$$$$$$$$$$$$$$
 
 //HTTP POST FOR ADDING AN OPINION FROM INDEX PAGE ------------------------------------
-app.post('/opinion/add',function(req,res){
+app.post('/opinion/add',isLoggedIn, function(req,res){
     var argumenttext = req.body.argumenttext;
     var topic = req.body.topic;
 
