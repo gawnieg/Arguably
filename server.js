@@ -132,7 +132,7 @@ function isLoggedIn(req, res, next) {
         return next();
 
     // if they aren't redirect them to the home page
-    res.redirect('/');
+    res.redirect('/login');
 }
 
 
@@ -205,7 +205,7 @@ app.get('/annotate',isLoggedIn,function(req,res){
 
 
 // Dynamic annotate page creation
-app.get('/annotate_topic/:name', function(req, res){
+app.get('/annotate_topic/:name', isLoggedIn, function(req, res){
 
   var nameForAnnotateTopic = decodeURIComponent(req.params.name);
 
@@ -290,7 +290,7 @@ app.get('/contact_us', function(req, res) {
 
 
 //SECTION FOR DOWNLOAD ALL BUTTON ON HOMEPAGE
-app.get('/download_all',function(req,res){
+app.get('/download_all',isLoggedIn,function(req,res){
     //declare array for all data and a separate one for replies
     var DownloadAllArray=[];
     var replyArray = [];
@@ -326,7 +326,7 @@ app.get('/download_all',function(req,res){
 
 
 //topic specific download buttons
-app.get('/downloadTopic/:name',function(req,res){
+app.get('/downloadTopic/:name',isLoggedIn,function(req,res){
 
     //declare array for all data and a separate one for replies
     var DownloadAllArray=[];
@@ -431,7 +431,7 @@ app.post('/opinion/add',isLoggedIn, function(req,res){
 
 
 //HTTP POST FOR ADDING AN OPINION TO A PARTICULAR TOPIC PAGE  ------------------------------------
-app.post('/opinion/addArgToTopic',function(req,res){
+app.post('/opinion/addArgToTopic',isLoggedIn,function(req,res){
     var argumenttext = req.body.argumenttext;
     var topic = decodeURIComponent(req.body.Topic);
 
