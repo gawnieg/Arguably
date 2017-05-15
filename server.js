@@ -111,6 +111,12 @@ app.get('/login', function(req, res) {
     // render the page and pass in any flash data if it exists
     res.render('pages/login.ejs', { message: req.flash('loginMessage') });
 });
+app.get('/signup', function(req, res) {
+
+     // render the page and pass in any flash data if it exists
+     res.render('pages/signup.ejs', { message: req.flash('signupMessage') });
+ });
+
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
 
