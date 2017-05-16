@@ -41,7 +41,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname,'public')));
 
 // required for passport
-app.use(session1({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+app.use(session1({ secret: 'aodhganIsAHerokuGod' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session

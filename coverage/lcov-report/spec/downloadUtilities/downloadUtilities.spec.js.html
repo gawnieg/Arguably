@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">76.92% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>50/65</span>
+        <span class='fraction'>66/66</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -35,13 +35,13 @@
         <span class='fraction'>8/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">76.92% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>50/65</span>
+        <span class='fraction'>66/66</span>
       </div>
     </div>
   </div>
-  <div class='status-line medium'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -283,16 +283,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -334,14 +334,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -391,7 +391,7 @@ var session = driver.session();
 &nbsp;
 //1st test for pushing results of a downloadquery to an array.
 //Simple result with only one "node".
-describe("Build downloadArray test", function() {
+describe("Build downloadArray test 1", function() {
   // var a;
   var testResult = {};
   testResult.records=[];
@@ -400,7 +400,7 @@ describe("Build downloadArray test", function() {
 &nbsp;
 &nbsp;
   var simpleDownloadQueryRecord = {
-    _fields : [1, "a test argument", [], null, null]
+    _fields : [1, "a test argument", "a test topic", [], null, null]
   };
 &nbsp;
    testResult.records.push(simpleDownloadQueryRecord)
@@ -419,7 +419,7 @@ describe("Build downloadArray test", function() {
 &nbsp;
 //Second test for pushing results of a downloadquery to an array.
 //More complex result.
-describe("Build downloadArray test", function() {
+describe("Build downloadArray test 2", function() {
   // var a;
   var testResult = {};
   testResult.records=[];
@@ -428,19 +428,19 @@ describe("Build downloadArray test", function() {
 &nbsp;
 &nbsp;
   var simpleDownloadQueryRecord = {
-    _fields : [{low: 1, high:0}, "a test argument", ["UNRELATED"], "a test reply", {low:2, high:0}]
+    _fields : [{low: 1, high:0}, "a test argument", "a test topic", ["UNRELATED"], "a test reply", {low:2, high:0}, "a test topic"]
   };
 &nbsp;
   var simpleDownloadQueryRecord2 = {
-    _fields : [{low:1, high:0}, "a test argument", ["SUPPORTS","ATTACKS"], "another test reply", {low:3, high:0}]
+    _fields : [{low:1, high:0}, "a test argument", "a test topic", ["SUPPORTS","ATTACKS"], "another test reply", {low:3, high:0}, "a test topic"]
   };
 &nbsp;
   var simpleDownloadQueryRecord3 = {
-    _fields : [{low:2, high:0}, "a test reply", [], null, null]
+    _fields : [2, "a test reply", "a test topic", [], null, null]
   };
 &nbsp;
   var simpleDownloadQueryRecord4 = {
-    _fields : [{low:3, high:0}, "another test reply", [], null, null]
+    _fields : [{low:3, high:0}, "another test reply", "a test topic", [], null, null]
   };
 &nbsp;
   testResult.records.push(simpleDownloadQueryRecord);
@@ -450,16 +450,16 @@ describe("Build downloadArray test", function() {
 &nbsp;
   it("take a result set and return an array", function() {
     getDownloadArray(testResult, downloadArray, replyArray);
-    //console.log(downloadArray);
+    console.log(downloadArray[0]);
     //expect(a[0].id).toBe(1);
     //expect(a[0].argumenttext).toBe("blah");
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[0].argument).toBe("a test argument");</span>
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[0].replies[0].reply).toBe("a test reply");</span>
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[0].replies[0].relation).toBe("UNRELATED");</span>
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[0].replies[0].replyID).toBe(2);</span>
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[0].replies[1].reply).toBe("another test reply");</span>
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[0].replies[1].relation).toBe("SUPPORTS");</span>
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[0].replies[1].replyID).toBe(3);</span>
+    expect(downloadArray[0].argument).toBe("a test argument");
+    expect(downloadArray[0].relatedNodes[0].relatedNode).toBe("a test reply");
+    expect(downloadArray[0].relatedNodes[0].majorityRelation).toBe("UNRELATED");
+    expect(downloadArray[0].relatedNodes[0].relatedNodeID).toBe(2);
+    expect(downloadArray[0].relatedNodes[1].relatedNode).toBe("another test reply");
+    expect(downloadArray[0].relatedNodes[1].majorityRelation).toBe("SUPPORTS");
+    expect(downloadArray[0].relatedNodes[1].relatedNodeID).toBe(3);
   });
 });
 &nbsp;
@@ -467,7 +467,7 @@ describe("Build downloadArray test", function() {
 &nbsp;
 //third test for pushing results of a downloadquery to an array.
 //slightly different input and result to execute different branches
-describe("Build downloadArray test", function() {
+describe("Build downloadArray test 3", function() {
   // var a;
   var testResult = {};
   testResult.records=[];
@@ -476,19 +476,19 @@ describe("Build downloadArray test", function() {
 &nbsp;
 &nbsp;
   var simpleDownloadQueryRecord = {
-    _fields : [{low: 1, high:0}, "a test argument", ["UNRELATED"], "a test reply", {low:3, high:0}]
+    _fields : [{low: 1, high:0}, "a test argument", "a test topic", ["UNRELATED"], "a test reply", {low:3, high:0}, "a test topic"]
   };
 &nbsp;
   var simpleDownloadQueryRecord2 = {
-    _fields : [{low:2, high:0}, "another test argument", ["ATTACKS","ATTACKS"], "another test reply", {low:4, high:0}]
+    _fields : [{low:2, high:0}, "another test argument", "a test topic", ["ATTACKS","ATTACKS"], "another test reply", {low:4, high:0}, "a test topic"]
   };
 &nbsp;
   var simpleDownloadQueryRecord3 = {
-    _fields : [{low:3, high:0}, "a test reply", [], null, null]
+    _fields : [{low:3, high:0}, "a test reply", "a test topic", [], null, null]
   };
 &nbsp;
   var simpleDownloadQueryRecord4 = {
-    _fields : [{low:4, high:0}, "another test reply", [], null, null]
+    _fields : [{low:4, high:0}, "another test reply", "a test topic", [], null, null]
   };
 &nbsp;
   testResult.records.push(simpleDownloadQueryRecord);
@@ -501,14 +501,14 @@ describe("Build downloadArray test", function() {
     //console.log(downloadArray);
     //expect(a[0].id).toBe(1);
     //expect(a[0].argumenttext).toBe("blah");
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[0].argument).toBe("a test argument");</span>
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[0].replies[0].reply).toBe("a test reply");</span>
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[0].replies[0].relation).toBe("UNRELATED");</span>
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[0].replies[0].replyID).toBe(3);</span>
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[1].argument).toBe("another test argument");</span>
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[1].replies[0].reply).toBe("another test reply");</span>
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[1].replies[0].relation).toBe("ATTACKS");</span>
-<span class="cstat-no" title="statement not covered" >    expect(downloadArray[1].replies[0].replyID).toBe(4);</span>
+    expect(downloadArray[0].argument).toBe("a test argument");
+    expect(downloadArray[0].relatedNodes[0].relatedNode).toBe("a test reply");
+    expect(downloadArray[0].relatedNodes[0].majorityRelation).toBe("UNRELATED");
+    expect(downloadArray[0].relatedNodes[0].relatedNodeID).toBe(3);
+    expect(downloadArray[1].argument).toBe("another test argument");
+    expect(downloadArray[1].relatedNodes[0].relatedNode).toBe("another test reply");
+    expect(downloadArray[1].relatedNodes[0].majorityRelation).toBe("ATTACKS");
+    expect(downloadArray[1].relatedNodes[0].relatedNodeID).toBe(4);
 &nbsp;
   });
 });
@@ -527,7 +527,7 @@ describe("getMode test", function() {
 &nbsp;
 &nbsp;
   var simpleDownloadQueryRecord = {
-    _fields : [{low:2, high:0}, "another test argument", ["ATTACKS","ATTACKS"], "another test reply", {low:4, high:0}]
+    _fields : [{low:2, high:0}, "another test argument", "a test topic", ["ATTACKS","ATTACKS"], "another test reply",{low:4, high:0}, "a test topic", ]
   };
 &nbsp;
 &nbsp;
@@ -550,7 +550,7 @@ describe("getMode test", function() {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun May 14 2017 18:37:14 GMT+0100 (BST)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue May 16 2017 13:57:04 GMT+0100 (BST)
 </div>
 </div>
 <script src="../../prettify.js"></script>
