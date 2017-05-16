@@ -12,7 +12,7 @@ var session = driver.session();
 
 //1st test for pushing results of a downloadquery to an array.
 //Simple result with only one "node".
-describe("Build downloadArray test", function() {
+describe("Build downloadArray test 1", function() {
   // var a;
   var testResult = {};
   testResult.records=[];
@@ -21,7 +21,7 @@ describe("Build downloadArray test", function() {
 
 
   var simpleDownloadQueryRecord = {
-    _fields : [1, "a test argument", [], null, null]
+    _fields : [1, "a test argument", "a test topic", [], null, null]
   };
 
    testResult.records.push(simpleDownloadQueryRecord)
@@ -40,7 +40,7 @@ describe("Build downloadArray test", function() {
 
 //Second test for pushing results of a downloadquery to an array.
 //More complex result.
-describe("Build downloadArray test", function() {
+describe("Build downloadArray test 2", function() {
   // var a;
   var testResult = {};
   testResult.records=[];
@@ -49,19 +49,19 @@ describe("Build downloadArray test", function() {
 
 
   var simpleDownloadQueryRecord = {
-    _fields : [{low: 1, high:0}, "a test argument", ["UNRELATED"], "a test reply", {low:2, high:0}]
+    _fields : [{low: 1, high:0}, "a test argument", "a test topic", ["UNRELATED"], "a test reply", {low:2, high:0}, "a test topic"]
   };
 
   var simpleDownloadQueryRecord2 = {
-    _fields : [{low:1, high:0}, "a test argument", ["SUPPORTS","ATTACKS"], "another test reply", {low:3, high:0}]
+    _fields : [{low:1, high:0}, "a test argument", "a test topic", ["SUPPORTS","ATTACKS"], "another test reply", {low:3, high:0}, "a test topic"]
   };
 
   var simpleDownloadQueryRecord3 = {
-    _fields : [{low:2, high:0}, "a test reply", [], null, null]
+    _fields : [2, "a test reply", "a test topic", [], null, null]
   };
 
   var simpleDownloadQueryRecord4 = {
-    _fields : [{low:3, high:0}, "another test reply", [], null, null]
+    _fields : [{low:3, high:0}, "another test reply", "a test topic", [], null, null]
   };
 
   testResult.records.push(simpleDownloadQueryRecord);
@@ -71,16 +71,16 @@ describe("Build downloadArray test", function() {
 
   it("take a result set and return an array", function() {
     getDownloadArray(testResult, downloadArray, replyArray);
-    //console.log(downloadArray);
+    console.log(downloadArray[0]);
     //expect(a[0].id).toBe(1);
     //expect(a[0].argumenttext).toBe("blah");
     expect(downloadArray[0].argument).toBe("a test argument");
-    expect(downloadArray[0].replies[0].reply).toBe("a test reply");
-    expect(downloadArray[0].replies[0].relation).toBe("UNRELATED");
-    expect(downloadArray[0].replies[0].replyID).toBe(2);
-    expect(downloadArray[0].replies[1].reply).toBe("another test reply");
-    expect(downloadArray[0].replies[1].relation).toBe("SUPPORTS");
-    expect(downloadArray[0].replies[1].replyID).toBe(3);
+    expect(downloadArray[0].relatedNodes[0].relatedNode).toBe("a test reply");
+    expect(downloadArray[0].relatedNodes[0].majorityRelation).toBe("UNRELATED");
+    expect(downloadArray[0].relatedNodes[0].relatedNodeID).toBe(2);
+    expect(downloadArray[0].relatedNodes[1].relatedNode).toBe("another test reply");
+    expect(downloadArray[0].relatedNodes[1].majorityRelation).toBe("SUPPORTS");
+    expect(downloadArray[0].relatedNodes[1].relatedNodeID).toBe(3);
   });
 });
 
@@ -88,7 +88,7 @@ describe("Build downloadArray test", function() {
 
 //third test for pushing results of a downloadquery to an array.
 //slightly different input and result to execute different branches
-describe("Build downloadArray test", function() {
+describe("Build downloadArray test 3", function() {
   // var a;
   var testResult = {};
   testResult.records=[];
@@ -97,19 +97,19 @@ describe("Build downloadArray test", function() {
 
 
   var simpleDownloadQueryRecord = {
-    _fields : [{low: 1, high:0}, "a test argument", ["UNRELATED"], "a test reply", {low:3, high:0}]
+    _fields : [{low: 1, high:0}, "a test argument", "a test topic", ["UNRELATED"], "a test reply", {low:3, high:0}, "a test topic"]
   };
 
   var simpleDownloadQueryRecord2 = {
-    _fields : [{low:2, high:0}, "another test argument", ["ATTACKS","ATTACKS"], "another test reply", {low:4, high:0}]
+    _fields : [{low:2, high:0}, "another test argument", "a test topic", ["ATTACKS","ATTACKS"], "another test reply", {low:4, high:0}, "a test topic"]
   };
 
   var simpleDownloadQueryRecord3 = {
-    _fields : [{low:3, high:0}, "a test reply", [], null, null]
+    _fields : [{low:3, high:0}, "a test reply", "a test topic", [], null, null]
   };
 
   var simpleDownloadQueryRecord4 = {
-    _fields : [{low:4, high:0}, "another test reply", [], null, null]
+    _fields : [{low:4, high:0}, "another test reply", "a test topic", [], null, null]
   };
 
   testResult.records.push(simpleDownloadQueryRecord);
@@ -123,13 +123,13 @@ describe("Build downloadArray test", function() {
     //expect(a[0].id).toBe(1);
     //expect(a[0].argumenttext).toBe("blah");
     expect(downloadArray[0].argument).toBe("a test argument");
-    expect(downloadArray[0].replies[0].reply).toBe("a test reply");
-    expect(downloadArray[0].replies[0].relation).toBe("UNRELATED");
-    expect(downloadArray[0].replies[0].replyID).toBe(3);
+    expect(downloadArray[0].relatedNodes[0].relatedNode).toBe("a test reply");
+    expect(downloadArray[0].relatedNodes[0].majorityRelation).toBe("UNRELATED");
+    expect(downloadArray[0].relatedNodes[0].relatedNodeID).toBe(3);
     expect(downloadArray[1].argument).toBe("another test argument");
-    expect(downloadArray[1].replies[0].reply).toBe("another test reply");
-    expect(downloadArray[1].replies[0].relation).toBe("ATTACKS");
-    expect(downloadArray[1].replies[0].replyID).toBe(4);
+    expect(downloadArray[1].relatedNodes[0].relatedNode).toBe("another test reply");
+    expect(downloadArray[1].relatedNodes[0].majorityRelation).toBe("ATTACKS");
+    expect(downloadArray[1].relatedNodes[0].relatedNodeID).toBe(4);
 
   });
 });
@@ -148,7 +148,7 @@ describe("getMode test", function() {
 
 
   var simpleDownloadQueryRecord = {
-    _fields : [{low:2, high:0}, "another test argument", ["ATTACKS","ATTACKS"], "another test reply", {low:4, high:0}]
+    _fields : [{low:2, high:0}, "another test argument", "a test topic", ["ATTACKS","ATTACKS"], "another test reply",{low:4, high:0}, "a test topic", ]
   };
 
 
