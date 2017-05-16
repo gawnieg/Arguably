@@ -37,13 +37,12 @@
           <button type="button" class="btn btn-link"
           data-toggle="collapse" data-target= <%=targetButton %>>Reply</button>
             <div id= <%=targetDiv %> class="collapse">
-              
+
         <form method = "post" action ="/opinion/addReply">
 
           <input type="text" name= "reply" size="25" required>
           <input type="hidden" class="topic" name="Topic" value = <%= encodeURIComponent(which_topic)%> />
-          <input type="hidden" class="initialArg" name="initialArg"
-		 value = <%= encodeURIComponent(topic.argumenttext) %> />
+          <input type="hidden" class="initialArg" name="initialArg" value = <%= encodeURIComponent(topic.argumenttext) %> />
 	  <input type="hidden" class="id" name="id" value = <%=topic.id%> />
           <br>
           <label> Select relationship </label>
@@ -75,15 +74,15 @@
 
           <label> Start a new conversation under this topic! </label>
           <br>
-          <textarea class="form-control" type="text" name = "argumenttext" placeholder="Your Argument here"style="height:120px" required> </textarea>
+          <textarea class="form-control" type="text" name = "argumenttext" placeholder="Your Argument here" style="height:120px" required></textarea>
           <br>
           <input type="hidden" class="topic" name="Topic" value = <%= encodeURIComponent(which_topic) %> />
-          <input type = "submit" value="Submit">
+          <input type = "submit" value="Submit"/>
 
-          <a href="javascript://" id="helper" data-toggle="popover" title="Help Me!" data-content="This is the topic page. Read over other people's opinions and give your own. You can either make an entirely new point or reply to someone else."><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i></a>
+
 
         </form>
-
+        <a href="javascript://" id="helper" data-toggle="popover" title="Help Me!" data-content="This is the topic page. Read over other people's opinions and give your own. You can either make an entirely new point or reply to someone else."><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i></a>
 
 
         <br /> <br />
