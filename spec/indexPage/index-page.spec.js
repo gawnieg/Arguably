@@ -4,12 +4,9 @@ var getAllTopics = utils.getAllTopics;
 var generateTopicArray = utils.generateTopicArray;
 
 
-
 var neo4j = require('neo4j-driver').v1;
 var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic('neo4j','goats'));
 var session = driver.session();
-
-
 
 
 //Testing the database query that returns a distinct list of topics
@@ -28,7 +25,7 @@ describe("DistinctGetTopicByName test", function() {
      //Delete test node from database.
 	    Promise.all([session.run('MATCH(node:Opinion {argumenttext:"I am for testing",topic:"TESTING123"})DELETE node'),
        ,session.run('MATCH(node:Opinion {argumenttext:"I am also for testing",topic:"TESTING123"})DELETE node')])
-      .then(done)//then(function() {console.log("IS THIS RUNNING?"); done()})
+      .then(done)
    });
 
   it("Compares length of distinct list before and after adds", function(done) {
@@ -57,7 +54,6 @@ describe("DistinctGetTopicByName test", function() {
 
 
 
-
 //Testing the generateTopicArray function used to build an array from
 //neo4j query results in the app.get for the topic selection page.
 //Mimics a result output from a neo4j query, calls the generateTopicArray
@@ -76,9 +72,6 @@ describe("Build TopicArray test", function() {
   testResult.records.push(singleRecord)
   it("take a result set and return an array", function() {
     a = generateTopicArray(testResult)
-
-    //expect(a[0].id).toBe(1);
-    //expect(a[0].argumenttext).toBe("blah");
     expect(a[0].topic.singleRecordTopic).toBe("Some Topic");
   });
 });

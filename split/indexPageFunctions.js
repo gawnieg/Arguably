@@ -1,14 +1,9 @@
-
-
-
+//returns all distinct topics in the database for the index page
 var getAllTopics = function(session) {
   return session.run('MATCH (n:Opinion) RETURN DISTINCT n.topic LIMIT 100');
-
-  //Altered for testing - original above.
-  //return session.run('MATCH (n:Opinion) WHERE NOT n.topic = "TESTING124" RETURN DISTINCT n.topic LIMIT 100');
-
 }
 
+//creates an array of topics from the result of getAllTopics
 var generateTopicArray = function(result) {
   var topicArray =[];
   result.records.forEach(function(record){

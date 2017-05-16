@@ -29,9 +29,6 @@ describe("Build downloadArray test 1", function() {
 
   it("take a result set and return an array", function() {
     getDownloadArray(testResult, downloadArray, replyArray);
-    //console.log(downloadArray);
-    //expect(a[0].id).toBe(1);
-    //expect(a[0].argumenttext).toBe("blah");
     expect(downloadArray[0].argument).toBe("a test argument");
   });
 });
@@ -71,9 +68,7 @@ describe("Build downloadArray test 2", function() {
 
   it("take a result set and return an array", function() {
     getDownloadArray(testResult, downloadArray, replyArray);
-    console.log(downloadArray[0]);
-    //expect(a[0].id).toBe(1);
-    //expect(a[0].argumenttext).toBe("blah");
+
     expect(downloadArray[0].argument).toBe("a test argument");
     expect(downloadArray[0].relatedNodes[0].relatedNode).toBe("a test reply");
     expect(downloadArray[0].relatedNodes[0].majorityRelation).toBe("UNRELATED");
@@ -119,9 +114,7 @@ describe("Build downloadArray test 3", function() {
 
   it("take a result set and return an array", function() {
     getDownloadArray(testResult, downloadArray, replyArray);
-    //console.log(downloadArray);
-    //expect(a[0].id).toBe(1);
-    //expect(a[0].argumenttext).toBe("blah");
+
     expect(downloadArray[0].argument).toBe("a test argument");
     expect(downloadArray[0].relatedNodes[0].relatedNode).toBe("a test reply");
     expect(downloadArray[0].relatedNodes[0].majorityRelation).toBe("UNRELATED");
@@ -140,22 +133,11 @@ describe("Build downloadArray test 3", function() {
 
 //Separate test just for getMode to isolate/pinpoint any potential errors
 describe("getMode test", function() {
-  // var a;
-  // var testResult = {};
-  // testResult.records=[];
-  // var downloadArray = [],
-  //     replyArray = [];
 
 
   var simpleDownloadQueryRecord = {
     _fields : [{low:2, high:0}, "another test argument", "a test topic", ["ATTACKS","ATTACKS"], "another test reply",{low:4, high:0}, "a test topic", ]
   };
-
-
-  // testResult.records.push(simpleDownloadQueryRecord);
-  // testResult.records.push(simpleDownloadQueryRecord2);
-  // testResult.records.push(simpleDownloadQueryRecord3);
-  // testResult.records.push(simpleDownloadQueryRecord4);
 
   it("take a record and return the mode", function() {
     var result1 = getMode(simpleDownloadQueryRecord);

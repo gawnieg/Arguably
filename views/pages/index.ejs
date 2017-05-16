@@ -20,41 +20,37 @@
           <h2> List of topics </h2>
           <ul style="list-style-type: none; padding: 0">
             <!-- This lists and links the topics to their dynamically created web pagtes -->
-	    <div class = "pre-scrollable">
+	      <div class = "pre-scrollable">
 	      <div class = "well well-sm">
 
-	    <% topics.forEach(function(topic){ %>
-	     <% var link = "/topicspage/" + encodeURIComponent(topic.topic) %>
+    	    <% topics.forEach(function(topic){ %>
+    	     <% var link = "/topicspage/" + encodeURIComponent(topic.topic) %>
 
-            <li> <a href= <%=link%> ><%= topic.topic %></a> </li>
-	      <% }) %>
-          </ul>
+                <li> <a href= <%=link%> ><%= topic.topic %></a> </li>
+    	      <% }) %>
+              </ul>
 
+    	  <form method = "post" action ="/opinion/add">
 
-	  
+              <div class="form-group">
+        	    <label> Suggest a new Topic</label>
+        	    <br>
+        	    <input class="form-control" type="text" name = "topic" placeholder = "Your Topic here" required>
+        		  <br>
+             </div>
 
-	  <form method = "post" action ="/opinion/add">
+              <div class="form-group">
+        	    <label> Initial Argument </label>
+        	    <br>
+        	    <textarea class="form-control" type="text" name = "argumenttext" placeholder="Your Argument here" style =
+        		   "height: 120px" required></textarea>
+        	    <br>
+        	    <input type = "submit" value="Submit">
+            </div>
 
-      <div class="form-group">
-	    <label> Suggest a new Topic</label>
-	    <br>
-	    <input class="form-control" type="text" name = "topic" placeholder = "Your Topic here" required>
-		  <br>
-     </div>
-
-      <div class="form-group">
-	    <label> Initial Argument </label>
-	    <br>
-	    <textarea class="form-control" type="text" name = "argumenttext" placeholder="Your Argument here" style =
-		   "height: 120px" required></textarea>
-	    <br>
-	    <input type = "submit" value="Submit">
-    </div>
-
-    <a href="javascript://" id="helper" data-toggle="popover" title="Help Me!" data-content="This is the topics page. You can either click on a topic to go to that topic's page. Or you can start your own topic with an initial argument."><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i></a>
-	  </form>
-	<br>
-	<!-- <a href="/download_all" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> <span class="network-name">Download All Data  </span>  </a> -->
+            <a href="javascript://" id="helper" data-toggle="popover" title="Help Me!" data-content="This is the topics page. You can either click on a topic to go to that topic's page. Or you can start your own topic with an initial argument."><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i></a>
+    	  </form>
+    	  <br>
 
         </div>
     </main>

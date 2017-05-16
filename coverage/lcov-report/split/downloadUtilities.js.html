@@ -169,13 +169,18 @@
 124
 125
 126
-127</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+127
+128
+129
+130</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -250,6 +255,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -275,8 +281,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-yes">6×</span>
@@ -295,85 +301,87 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var downloadQuery = <span class="fstat-no" title="function not covered" >function(session) {</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">//database query to return all the necessary information required for the JSON download for all topics
+var downloadQuery = <span class="fstat-no" title="function not covered" >function(session) {</span>
 <span class="cstat-no" title="statement not covered" >  return session.run('MATCH (n:Opinion) OPTIONAL MATCH (n) &lt;-[r:ATTACKS|SUPPORTS|UNRELATED]- (b:Opinion) RETURN DISTINCT ID(n) as id, n.argumenttext as argument, n.topic AS nTopic, COLLECT(Type(r)) as type, b.argumenttext as reply, ID(b) as replyID, b.topic AS bTopic ORDER BY id');</span>
 }
 &nbsp;
+//database query to return all the necessary information required for the JSON download for topicName
 var downloadQueryTopic = <span class="fstat-no" title="function not covered" >function(session, topicName) {</span>
-	//console.log(topicName);
-<span class="cstat-no" title="statement not covered" >	  return session.run("MATCH (n:Opinion) WHERE n.topic = \"" + topicName + </span>
+<span class="cstat-no" title="statement not covered" >	  return session.run("MATCH (n:Opinion) WHERE n.topic = \"" + topicName +</span>
 	  "\" OPTIONAL MATCH (n) &lt;-[r:ATTACKS|SUPPORTS|UNRELATED]- (b:Opinion) WHERE b.topic = \"" + topicName +
 	  "\"RETURN DISTINCT ID(n) as id, n.argumenttext as argument, n.topic AS nTopic, COLLECT(Type(r)) as type, b.argumenttext as reply, ID(b) as replyID, b.topic AS bTopic ORDER BY id");
 &nbsp;
 }
 &nbsp;
+//formats the data returned by downloadQuery into the format in the JSON
 var getDownloadArray = function(result, DownloadAllArray, replyArray) {
 &nbsp;
   	    //if the first argument has a reply, push to reply array
   	    if (result.records[0]._fields[4] != null) {
-  		var stats = getMode(result.records[0]);
-  		replyArray.push({
-  		    relatedNode: result.records[0]._fields[4],
-  		    relatedNodeID: result.records[0]._fields[5].low,
-			relatedNodeTopic: result.records[0]._fields[6],
-			allRelations: {
-					Unrelated: stats[2][0],
-					Attacks: stats[2][1],
-					Supports: stats[2][2]
-				},
-  		    majorityRelation: stats[0],
-  		    agreement: stats[1]
-  		});
+      		var stats = getMode(result.records[0]);
+      		replyArray.push({
+      		    relatedNode: result.records[0]._fields[4],
+      		    relatedNodeID: result.records[0]._fields[5].low,
+    			relatedNodeTopic: result.records[0]._fields[6],
+    			allRelations: {
+    					Unrelated: stats[2][0],
+    					Attacks: stats[2][1],
+    					Supports: stats[2][2]
+    				},
+      		    majorityRelation: stats[0],
+      		    agreement: stats[1]
+      		});
   	    }
 &nbsp;
   	    for (j = 1; j &lt; result.records.length; j++){
 &nbsp;
   		//get stats (mode and agreement)
-  		stats = getMode(result.records[j]);
-  		//if the argument has the same id as the previous
-  		if (result.records[j]._fields[0].low == result.records[j - 1]._fields[0].low) {
-  		    //if it has replies add to the reply array for that argument
-  		    <span class="missing-if-branch" title="else path not taken" >E</span>if (result.records[j]._fields[4] != null) {
-  			replyArray.push({
-  			    relatedNode: result.records[j]._fields[4],
-  			    relatedNodeID: result.records[j]._fields[5].low,
-				relatedNodeTopic: result.records[j]._fields[6],
-				allRelations: {
-					Unrelated: stats[2][0],
-					Attacks: stats[2][1],
-					Supports: stats[2][2]
-				},
-  			    majorityRelation: stats[0],
-  			    agreement: stats[1]
-  			});
-  		    }
-  		} else {
-  		    //push to data array
-  		    DownloadAllArray.push({
-				argument: result.records[j-1]._fields[1],
-				id: result.records[j-1]._fields[0].low,
-				topic: result.records[j-1]._fields[2],
-				relatedNodes: replyArray
-            });
-  		    //reset reply array and then add the reply for the current argument
-  		    replyArray = [];
-  		    if (result.records[j]._fields[4] != null) {
-  			replyArray.push({
-  			    relatedNode: result.records[j]._fields[4],
-  			    relatedNodeID: result.records[j]._fields[5].low,
-				relatedNodeTopic: result.records[j]._fields[6],
-				allRelations: {
-					Unrelated: stats[2][0],
-					Attacks: stats[2][1],
-					Supports: stats[2][2]
-				},
-  			    majorityRelation: stats[0],
-  			    agreement: stats[1]
-  			});
-  		    }
-  		}
+      		stats = getMode(result.records[j]);
+      		//if the argument has the same id as the previous
+      		if (result.records[j]._fields[0].low == result.records[j - 1]._fields[0].low) {
+      		    //if it has replies add to the reply array for that argument
+      		    <span class="missing-if-branch" title="else path not taken" >E</span>if (result.records[j]._fields[4] != null) {
+          			replyArray.push({
+          			    relatedNode: result.records[j]._fields[4],
+          			    relatedNodeID: result.records[j]._fields[5].low,
+        				relatedNodeTopic: result.records[j]._fields[6],
+        				allRelations: {
+        					Unrelated: stats[2][0],
+        					Attacks: stats[2][1],
+        					Supports: stats[2][2]
+        				},
+          			    majorityRelation: stats[0],
+          			    agreement: stats[1]
+          			});
+      		    }
+      		} else {
+      		    //push to data array
+      		    DownloadAllArray.push({
+    				argument: result.records[j-1]._fields[1],
+    				id: result.records[j-1]._fields[0].low,
+    				topic: result.records[j-1]._fields[2],
+    				relatedNodes: replyArray
+                });
+      		    //reset reply array and then add the reply for the current argument
+      		    replyArray = [];
+      		    if (result.records[j]._fields[4] != null) {
+          			replyArray.push({
+          			    relatedNode: result.records[j]._fields[4],
+          			    relatedNodeID: result.records[j]._fields[5].low,
+        				relatedNodeTopic: result.records[j]._fields[6],
+        				allRelations: {
+        					Unrelated: stats[2][0],
+        					Attacks: stats[2][1],
+        					Supports: stats[2][2]
+        				},
+          			    majorityRelation: stats[0],
+          			    agreement: stats[1]
+          			});
+      		    }
+      		}
 &nbsp;
-              }
+        }
   	    //push last argument to data array
   	    DownloadAllArray.push({
 			argument: result.records[result.records.length-1]._fields[1],
@@ -385,6 +393,7 @@ var getDownloadArray = function(result, DownloadAllArray, replyArray) {
 &nbsp;
 }
 &nbsp;
+//returns the modal relationship between two nodes, along with the proportion, and the number of each type of relationship
 function getMode(record) {
     //console.log(record);
     var length = record._fields[3].length,
@@ -401,8 +410,8 @@ function getMode(record) {
 		}
 &nbsp;
     }
+&nbsp;
     var sum = unrelatedCount + attacksCount + supportsCount;
-    //console.log(attacksCount + " " + supportsCount + " " + unrelatedCount);
 &nbsp;
     if (unrelatedCount &gt;= supportsCount &amp;&amp; unrelatedCount &gt;= attacksCount) {
 		return ["UNRELATED",unrelatedCount/sum, [unrelatedCount, attacksCount, supportsCount]];
@@ -427,7 +436,7 @@ module.exports.downloadQueryTopic = downloadQueryTopic;
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue May 16 2017 15:53:15 GMT+0100 (BST)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue May 16 2017 21:44:00 GMT+0100 (BST)
 </div>
 </div>
 <script src="../prettify.js"></script>

@@ -14,75 +14,61 @@
       <div class="jumbotron" id = "comments">
         <h1><%= which_topic %></h1>
         <br />
-
-
-
         <h2> Related propositions: </h2>
         <br />
-
-   <!-- <ul style="list-style-type: none;"> -->
-
       <% topics.forEach(function(topic){ %>
-
-
-
         <li style="list-style-type: none;">
-<% for(i = 0; i < topic.isReply; i++) { %>
-   <ul>
-     <% } %>
-     <div class="well well-sm">
-          <%= topic.argumenttext %>
-          <% var targetButton = "#demo_" + topic.id %>
-          <% var targetDiv = "demo_" + topic.id %>
-          <button type="button" class="btn btn-link"
-          data-toggle="collapse" data-target= <%=targetButton %>>Reply</button>
-            <div id= <%=targetDiv %> class="collapse">
+        <% for(i = 0; i < topic.isReply; i++) { %>
+           <ul>
+             <% } %>
+         <div class="well well-sm">
+              <%= topic.argumenttext %>
+              <% var targetButton = "#demo_" + topic.id %>
+              <% var targetDiv = "demo_" + topic.id %>
+              <button type="button" class="btn btn-link"
+              data-toggle="collapse" data-target= <%=targetButton %>>Reply</button>
+              <div id= <%=targetDiv %> class="collapse">
 
-        <form method = "post" action ="/opinion/addReply">
+                <form method = "post" action ="/opinion/addReply">
 
-          <input type="text" name= "reply" size="25" required>
-          <input type="hidden" class="topic" name="Topic" value = <%= encodeURIComponent(which_topic)%> />
-          <input type="hidden" class="initialArg" name="initialArg"
-		 value = <%= encodeURIComponent(topic.argumenttext) %> />
-	  <input type="hidden" class="id" name="id" value = <%=topic.id%> />
-          <br>
-          <label> Select relationship </label>
+                  <input type="text" name= "reply" size="25" required>
+                  <input type="hidden" class="topic" name="Topic" value = <%= encodeURIComponent(which_topic)%> />
+                  <input type="hidden" class="initialArg" name="initialArg"
+        		 value = <%= encodeURIComponent(topic.argumenttext) %> />
+        	      <input type="hidden" class="id" name="id" value = <%=topic.id%> />
+                  <br>
+                  <label> Select relationship </label>
 
-          <select name = "relType">
-        <option value = "ATTACKS"> Attacks </option>
-        <option value = "SUPPORTS"> Supports </option>
-        <option value = "UNRELATED" selected> Unrelated </option>
-          </select>
+                  <select name = "relType">
+                    <option value = "ATTACKS"> Attacks </option>
+                    <option value = "SUPPORTS"> Supports </option>
+                    <option value = "UNRELATED" selected> Unrelated </option>
+                  </select>
 
 
-          <input type = "submit" value="Reply">
-        </form>
+                  <input type = "submit" value="Reply">
+                </form>
             </div>
         </div>
         <% for(i = 0; i < topic.isReply; i++) { %>
            </ul>
-            <% } %>
-
-
-
-        <% }) %>
-
-      </li>
-
+        <% } %>
+    <% }) %>
+    </li>
     </ul>
 
        <form method = "post" action ="/opinion/addArgToTopic">
 
           <label> Start a new conversation under this topic! </label>
           <br>
-          <textarea class="form-control" type="text" name = "argumenttext" placeholder="Your Argument here"style="height:120px" required> </textarea>
+          <textarea class="form-control" type="text" name = "argumenttext" placeholder="Your Argument here"style="height:120px" required></textarea>
           <br>
           <input type="hidden" class="topic" name="Topic" value = <%= encodeURIComponent(which_topic) %> />
           <input type = "submit" value="Submit">
 
           <a href="javascript://" id="helper" data-toggle="popover" title="Help Me!" data-content="This is the topic page. Read over other people's opinions and give your own. You can either make an entirely new point or reply to someone else."><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i></a>
 
-        </form>
+      </form>
 
 
 
@@ -124,18 +110,19 @@
         <% var linkName = "/downloadTopic/" + encodeURIComponent(which_topic) %>
         <a href= <%= linkName %> class="btn btn-success btn-lg"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> <span class="network-name">Download data for this topic  </span>  </a>
       <% } else {%>
-        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#myModal"> Download data for this topic </button>
+          <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#myModal"> Download data for this topic </button>
+
           <!-- Modal -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-body"> There is no data in the database, please start some conversations!</div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    	      <div class="modal-dialog" role="document">
+    	        <div class="modal-content">
+    	          <div class="modal-body"> There is no data in the database, please start some conversations!</div>
+    	          <div class="modal-footer">
+    	              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    	          </div>
+    	        </div>
+    	      </div>
+    	    </div>
           <% } %>
     </main>
 

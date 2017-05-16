@@ -17,17 +17,17 @@
       <br><br>
       <ul style="list-style-type: none; padding: 0">
         <!-- This lists and links the topics to their dynamically created web pagtes -->
-  <div class = "pre-scrollable">
-    <div class = "well well-sm">
+        <div class = "pre-scrollable">
+        <div class = "well well-sm">
 
-  <% searchArray.forEach(function(topic){ %>
-   <% var link = "/topicspage/" + encodeURIComponent(topic.topic) %>
+      <% searchArray.forEach(function(topic){ %>
+       <% var link = "/topicspage/" + encodeURIComponent(topic.topic) %>
 
         <li> <a href= <%=link%> ><%= topic.topic %></a> </li>
-    <% }) %>
+        <% }) %>
       </ul>
 
-    <% } %>
+      <% } %>
     </main>
 
     <footer>

@@ -22,7 +22,7 @@ describe("getTwoNodesSpecificTopic test", function() {
      //Delete test nodes from database.
 	    Promise.all([session.run('MATCH(node:Opinion {argumenttext:"I am for testing",topic:"TESTING126"})DELETE node'),
        ,session.run('MATCH(node:Opinion {argumenttext:"I am also for testing",topic:"TESTING126"})DELETE node')])
-      .then(done)//then(function() {console.log("IS THIS RUNNING?"); done()})
+      .then(done)
    });
 
 

@@ -19,14 +19,6 @@ var session = driver.session();
 
 
 
-
-
-
-
-
-
-
-
 //The first test just tests the function's output when a mock
 //query result of a single node result is input.
 describe("Build TopicArray test", function() {
@@ -61,7 +53,6 @@ describe("Build TopicArray test", function() {
     expect(topicArr[0].argumenttext).toBe("IAmArgInput");
   });
 });
-
 
 
 //The second test gives a mock query result containing
@@ -154,9 +145,6 @@ describe("Build TopicArray test", function() {
     expect(topicArr[2].argumenttext).toBe("I am a second argument");
   });
 });
-
-
-
 
 
 //This test executes the branch for the case of "incorrect reply records"
@@ -326,91 +314,3 @@ describe("Build TopicArray test", function() {
     expect(findIndResult).toBe(2)
   });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// console.log(result.records[2]._fields[1]);     This is where the
-
-
-
-
-
-// var recordOne = {
-//   _fields : [
-//     {
-//       identity: {
-//         low : 1
-//       },
-//       properties:{
-//         argumenttext: "blah",
-//         topic: "topic"
-//       }
-//     }
-//   ]
-// };
-// var recordTwo = {
-//   _fields : [
-//     {
-//       identity: {
-//         low : 2
-//       },
-//       properties:{
-//         argumenttext: "blah2",
-//         topic: "topic2"
-//       }
-//     }
-//   ]
-// };
-
-
-
-
-
-
-
-
-
-        // {
-        //   _fields : [
-        //     {
-        //       identity: {
-        //         low : 3
-        //       },
-        //       properties:{
-        //         argumenttext: "IAmArgInput3",
-        //         topic: "topicInput",
-        //         isReply: 1
-        //       }
-        //     }, []
-        //
-        //   ]
-        // }

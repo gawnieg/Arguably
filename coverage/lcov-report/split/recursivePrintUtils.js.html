@@ -102,14 +102,8 @@
 57
 58
 59
-60
-61
-62
-63
-64
-65</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+60</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7×</span>
@@ -119,14 +113,12 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -141,7 +133,6 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -151,11 +142,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -171,64 +161,59 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var recursivePrint = function(records, index, printedArr, topicArr) {
-//    console.log(records.length);
-//    console.log("printed array length: " + printedArr.length);
-    //console.log("index: " + index);
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">//recursive depth first search to display comments on a topics page
+var recursivePrint = function(records, index, printedArr, topicArr) {
+&nbsp;
     //return if index is out of bounds
     if (index &gt;= records.length) {
-	return;
+	       return;
     }
     if (printedArr.indexOf(records[index]._fields[0].identity.low) &gt; -1) {
-	recursivePrint(records,index+1,printedArr,topicArr);
-	return;
+	    recursivePrint(records,index+1,printedArr,topicArr);
+	    return;
     }
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (printedArr.length &gt;= records.length) {
-<span class="cstat-no" title="statement not covered" >	return;</span>
-    }
-&nbsp;
-&nbsp;
     //return if it's already been "printed"
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (printedArr.length &gt;= records.length) {
+<span class="cstat-no" title="statement not covered" >	    return;</span>
+    }
 &nbsp;
-    //console.log("pushing " + index);
+&nbsp;
     printedArr.push(records[index]._fields[0].identity.low);
     topicArr.push({
         id: records[index]._fields[0].identity.low,
         argumenttext: records[index]._fields[0].properties.argumenttext,
         topic: records[index]._fields[0].properties.topic,
-	isReply: records[index]._fields[0].properties.isReply
+	    isReply: records[index]._fields[0].properties.isReply
     });
 &nbsp;
     //if node has replies
     if (records[index]._fields[1].length &gt; 0) {
-	var i;
-	for (i = records[index]._fields[1].length - 1; i &gt;= 0 ; i--) {
-	    //find index of each reply
-	    var replyIndex = findIndex(records, records[index]._fields[1][i].identity.low);
-	    //console.log("ReplyIndex: " + replyIndex);
-	    <span class="missing-if-branch" title="else path not taken" >E</span>if (replyIndex &gt;= 0) {
-		//print reply
-		recursivePrint(records, replyIndex, printedArr, topicArr);
-	    }
-	}
+    	var i;
+    	for (i = records[index]._fields[1].length - 1; i &gt;= 0 ; i--) {
+    	    //find index of each reply
+    	    var replyIndex = findIndex(records, records[index]._fields[1][i].identity.low);
+    	    <span class="missing-if-branch" title="else path not taken" >E</span>if (replyIndex &gt;= 0) {
+        		//print reply
+        		recursivePrint(records, replyIndex, printedArr, topicArr);
+    	    }
+    	}
     }
-    //else go to next place in array
+&nbsp;
     if (records[index]._fields[0].properties.isReply &gt; 0){
-	return;
+	    return;
     }
 &nbsp;
+    //else go to next place in array
     else recursivePrint(records,index+1,printedArr,topicArr);
-&nbsp;
-&nbsp;
 }
 &nbsp;
-&nbsp;
+//finds the index of a reply within the array return from the database query
 var findIndex = function(records, item) {
     var i;
     for (i = 0; i &lt; records.length; i++) {
-	if (records[i]._fields[0].identity.low == item) {
-	    return i;
-	}
+    	if (records[i]._fields[0].identity.low == item) {
+    	    return i;
+    	}
     }
     return -1;
 }
@@ -241,7 +226,7 @@ module.exports.findIndex = findIndex;
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue May 16 2017 15:53:15 GMT+0100 (BST)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue May 16 2017 21:44:00 GMT+0100 (BST)
 </div>
 </div>
 <script src="../prettify.js"></script>

@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>66/66</span>
+        <span class='fraction'>65/65</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>66/66</span>
+        <span class='fraction'>65/65</span>
       </div>
     </div>
   </div>
@@ -192,25 +192,7 @@
 147
 148
 149
-150
-151
-152
-153
-154
-155
-156
-157
-158
-159
-160
-161
-162
-163
-164
-165
-166
-167
-168</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+150</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
@@ -241,9 +223,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -283,8 +262,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
@@ -332,8 +309,6 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
@@ -354,18 +329,7 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -408,9 +372,6 @@ describe("Build downloadArray test 1", function() {
 &nbsp;
   it("take a result set and return an array", function() {
     getDownloadArray(testResult, downloadArray, replyArray);
-    //console.log(downloadArray);
-    //expect(a[0].id).toBe(1);
-    //expect(a[0].argumenttext).toBe("blah");
     expect(downloadArray[0].argument).toBe("a test argument");
   });
 });
@@ -450,9 +411,7 @@ describe("Build downloadArray test 2", function() {
 &nbsp;
   it("take a result set and return an array", function() {
     getDownloadArray(testResult, downloadArray, replyArray);
-    console.log(downloadArray[0]);
-    //expect(a[0].id).toBe(1);
-    //expect(a[0].argumenttext).toBe("blah");
+&nbsp;
     expect(downloadArray[0].argument).toBe("a test argument");
     expect(downloadArray[0].relatedNodes[0].relatedNode).toBe("a test reply");
     expect(downloadArray[0].relatedNodes[0].majorityRelation).toBe("UNRELATED");
@@ -498,9 +457,7 @@ describe("Build downloadArray test 3", function() {
 &nbsp;
   it("take a result set and return an array", function() {
     getDownloadArray(testResult, downloadArray, replyArray);
-    //console.log(downloadArray);
-    //expect(a[0].id).toBe(1);
-    //expect(a[0].argumenttext).toBe("blah");
+&nbsp;
     expect(downloadArray[0].argument).toBe("a test argument");
     expect(downloadArray[0].relatedNodes[0].relatedNode).toBe("a test reply");
     expect(downloadArray[0].relatedNodes[0].majorityRelation).toBe("UNRELATED");
@@ -519,22 +476,11 @@ describe("Build downloadArray test 3", function() {
 &nbsp;
 //Separate test just for getMode to isolate/pinpoint any potential errors
 describe("getMode test", function() {
-  // var a;
-  // var testResult = {};
-  // testResult.records=[];
-  // var downloadArray = [],
-  //     replyArray = [];
 &nbsp;
 &nbsp;
   var simpleDownloadQueryRecord = {
     _fields : [{low:2, high:0}, "another test argument", "a test topic", ["ATTACKS","ATTACKS"], "another test reply",{low:4, high:0}, "a test topic", ]
   };
-&nbsp;
-&nbsp;
-  // testResult.records.push(simpleDownloadQueryRecord);
-  // testResult.records.push(simpleDownloadQueryRecord2);
-  // testResult.records.push(simpleDownloadQueryRecord3);
-  // testResult.records.push(simpleDownloadQueryRecord4);
 &nbsp;
   it("take a record and return the mode", function() {
     var result1 = getMode(simpleDownloadQueryRecord);
@@ -550,7 +496,7 @@ describe("getMode test", function() {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue May 16 2017 15:53:15 GMT+0100 (BST)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue May 16 2017 21:44:00 GMT+0100 (BST)
 </div>
 </div>
 <script src="../../prettify.js"></script>

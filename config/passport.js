@@ -20,9 +20,7 @@ module.exports = function(passport) {
         });
     });
 
-
-    // =========================================================================
-    // LOCAL SIGNUP ============================================================
+    //local signup
     passport.use('local-signup', new LocalStrategy({
         // by default, local strategy uses username and password, we will override with email
         usernameField : 'email',

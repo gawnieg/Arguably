@@ -1,8 +1,9 @@
+//returns two nodes from any topic for annotation
 var getTwoNodesAnyTopic = function(session) {
   return session.run('MATCH (node1:Opinion) OPTIONAL MATCH (node1)-[r:ATTACKS|SUPPORTS|UNRELATED]-(node2:Opinion) WITH node1, count(r) as rels RETURN node1, rand() AS r ORDER BY rels,r ASC LIMIT 2');
 }
 
-
+//creates an array from the results of getTwoNodesAnyTopic
 var makeTwoNodesArrayStatic = function(result) {
 
   var annotateArray =[];

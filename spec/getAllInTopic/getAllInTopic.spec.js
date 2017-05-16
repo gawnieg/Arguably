@@ -7,7 +7,6 @@ var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic('neo4j','goats'));
 var session = driver.session();
 
 
-
 //Testing the database query that returns two nodes from a specific topic.
 describe("getAllNodesInTopic test", function() {
 

@@ -1,12 +1,11 @@
+//returns all topics from database that include searchRequest (case insensitve)
 var getSearchResults = function(session, searchRequest) {
-    //console.log("HELLO ");
-    console.log("MATCH (n:Opinion) WHERE n.topic =~ \"(?i).*" + searchRequest + ".*\" RETURN DISTINCT n.topic LIMIT 100");
     return session.run("MATCH (n:Opinion) WHERE n.topic =~ \"(?i).*" + searchRequest + ".*\" RETURN DISTINCT n.topic LIMIT 100");
-    //return session.run('MATCH (n:Opinion) RETURN DISTINCT n.topic LIMIT 100');
+
 }
 
+//creates an array from the topics returned from getSearchResults
 var getSearchArray = function(result) {
-  console.log(result.records);
   var searchArray =[];
   for(i = 0; i < result.records.length; i++){
       searchArray.push({

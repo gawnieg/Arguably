@@ -81,7 +81,7 @@ describe("getTwoNodesAnyTopic test", function() {
      //Delete test nodes from database.
 	    Promise.all([session.run('MATCH(node:Opinion {argumenttext:"I am for testing",topic:"TESTING125"})DELETE node'),
        ,session.run('MATCH(node:Opinion {argumenttext:"I am also for testing",topic:"TESTING125"})DELETE node')])
-      .then(done)//then(function() {console.log("IS THIS RUNNING?"); done()})
+      .then(done)
    });
 
 
@@ -103,34 +103,6 @@ describe("getTwoNodesAnyTopic test", function() {
         done();
       })
     });
-
-
-
-
-	// //Run the function
-  // getTwoNodesAnyTopic(session).then(function (result) {
-  //   expect(result.records.length).toBe(2);
-  //   done();
-  // })
-
-
-
-  // .then(function () {
-  //   Promise.all(
-  //     [
-  //     session.run('CREATE(node:Opinion {argumenttext:"I am for testing",topic:"TESTING125"})')
-  //     , session.run('CREATE(node:Opinion {argumenttext:"I am also for testing",topic:"TESTING125"})')
-  //   ]
-  //   )
-  // .then(function () {
-  //   getAllTopics(session).then(function (result) {
-  //     expect(result.records.length).toBe(returnLength + 1);
-  //     done();
-  //   })
-  //
-  //     })
-  //   });
-
 
 
   });
