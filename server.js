@@ -107,11 +107,16 @@ const getSearchArray = searchUtilities.getSearchArray;
 //INSIDE +'s: SECTION FOR "DECLARING" PAGES. ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-app.post('/login', passport.authenticate('local-login', {
-    successRedirect : '/main', // redirect to the secure profile section
-    failureRedirect : '/login', // redirect back to the signup page if there is an error
-    failureFlash : true // allow flash messages
-}));
+app.post('/login', passport.authenticate('local-login'),function(req,res) {
+    // successRedirect : '/main', // redirect to the secure profile section
+    // failureRedirect : '/login', // redirect back to the signup page if there is an error
+    // failureFlash : true // allow flash messages
+
+    res.redirect(req.session.returnTo||'/');
+    delete req.session.returnTo;
+
+
+});
 app.get('/login', function(req, res) {
 
     // render the page and pass in any flash data if it exists
@@ -143,6 +148,7 @@ function isLoggedIn(req, res, next) {
         return next();
 
     // if they aren't redirect them to the home page
+    req.session.returnTo=req.path;
     res.redirect('/login');
 }
 
