@@ -107,16 +107,14 @@ const getSearchArray = searchUtilities.getSearchArray;
 //INSIDE +'s: SECTION FOR "DECLARING" PAGES. ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-app.post('/login', passport.authenticate('local-login'),function(req,res) {
-    // successRedirect : '/main', // redirect to the secure profile section
-    // failureRedirect : '/login', // redirect back to the signup page if there is an error
-    // failureFlash : true // allow flash messages
-
-    res.redirect(req.session.returnTo||'/');
-    delete req.session.returnTo;
+app.post('/login', passport.authenticate('local-login', {
+    successRedirect : '/main', // redirect to the secure profile section
+    failureRedirect : '/login', // redirect back to the signup page if there is an error
+    failureFlash : true // allow flash messages
 
 
-});
+
+}));
 app.get('/login', function(req, res) {
 
     // render the page and pass in any flash data if it exists
@@ -528,7 +526,7 @@ app.post('/opinion/addrelationship_byopinion/:topic/:id1/:id2',function(req,res)
 
 
 //HTTP POST FOR ADDING A REPLY ON A TOPIC PAGE ------------------------
-app.post('/opinion/addReply', function(req,res) {
+app.post('/opinion/addReply', isLoggedIn, function(req,res) {
     var replyText = req.body.reply;
     var topic = decodeURIComponent(req.body.Topic);
     var initialArg = decodeURIComponent(req.body.initialArg);
