@@ -1,9 +1,15 @@
 // testS
 // server.js
 // load the things we need
-var graphenedbURL = process.env.GRAPHENEDB_BOLT_URL||'bolt://hobby-cmmcbflhoeaggbkemgjdphpl.dbs.graphenedb.com:24786';
-var graphenedbUser = process.env.GRAPHENEDB_BOLT_USER||'app68637605-SiF9LC';
-var graphenedbPass = process.env.GRAPHENEDB_BOLT_PASSWORD||'b.xP9txs0iJHbd.hWoV5mFVKkVlR2SH';
+// this is for heroku only version
+// var graphenedbURL = process.env.GRAPHENEDB_BOLT_URL||'bolt://hobby-cmmcbflhoeaggbkemgjdphpl.dbs.graphenedb.com:24786';
+// var graphenedbUser = process.env.GRAPHENEDB_BOLT_USER||'app68637605-SiF9LC';
+// var graphenedbPass = process.env.GRAPHENEDB_BOLT_PASSWORD||'b.xP9txs0iJHbd.hWoV5mFVKkVlR2SH';
+
+var graphenedbURL = process.env.GRAPHENEDB_BOLT_URL||'bolt://localhost';
+var graphenedbUser = process.env.GRAPHENEDB_BOLT_USER||'neo4j';
+var graphenedbPass = process.env.GRAPHENEDB_BOLT_PASSWORD||'goats';
+
 var port = process.env.PORT || 8080;
 
 //This is to bring express - app is the express object which links us to express
@@ -13,11 +19,11 @@ var app = express(); // this is the express app which gives us access to ex[pres
 
 var mongoose = require('mongoose');
 var passport = require('passport');
-var flash    = require('connect-flash');
+var flash = require('connect-flash');
 
-var morgan       = require('morgan');
+var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
-var session1      = require('express-session');
+var session1 = require('express-session');
 var configDB = require('./config/database.js');
 var path = require('path');
 var logger = require('morgan');
@@ -41,7 +47,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname,'public')));
 
 // required for passport
-app.use(session1({ secret: 'aodhganIsAHerokuGod' })); // session secret
+app.use(session1({ secret: 'mynameismrcomputer' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
