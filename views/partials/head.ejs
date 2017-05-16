@@ -8,12 +8,9 @@
 <!-- CSS (load bootstrap from a CDN) -->
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script
-  src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Work+Sans"
-  rel="stylesheet">
-  <link
-  href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
 
 <script src="https://use.fontawesome.com/d6380fb0cd.js"></script>
 <script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
@@ -23,45 +20,50 @@
 
 <!-- Enables the popover function for the question marks -->
 <script>
-$(document).ready(function(){
-    $('[data-toggle="popover"]').popover();
+    $(document).ready(function() {
+        $('[data-toggle="popover"]').popover();
 
-});
+    });
 </script>
 
 
 
 
 <style>
-    body    {
-    	    padding-top:50px;
-    	    /*font-family: "Helvetica Neue", Helvetica, Arial,
+    body {
+        padding-top: 50px;
+        /*font-family: "Helvetica Neue", Helvetica, Arial,
 	    sans-serif;*/
-	    /*font-family: 'Work Sans', sans-serif;*/
-      color: #000;
-      background: #FFFFFF;
-	    /*font-family: 'Playfair Display', serif;*/
+        /*font-family: 'Work Sans', sans-serif;*/
+        color: #000;
+        background: #FFFFFF;
+        /*font-family: 'Playfair Display', serif;*/
     }
+
     .well {
-    	background: #FFFFFF;
+        background: #FFFFFF;
     }
+
     .jumbotron {
         background: #e6f5ff;
     }
+
     .button {
-    display: block;
-    width: 425px;
-    height: 50px;
-    background: #4E9CAF;
-    padding: 10px;
-    text-align: center;
-    border-radius: 5px;
-    color: white;
-    font-weight: bold;
+        display: block;
+        width: 425px;
+        height: 50px;
+        background: #4E9CAF;
+        padding: 10px;
+        text-align: center;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
     }
+
     .navbar {
         background: #000;
-}
+    }
+
     .navbar-brand,
     .navbar-nav li a {
         line-height: 60px;
@@ -69,69 +71,78 @@ $(document).ready(function(){
         padding-top: 0;
         font-size: 1.5em !important;
         color: white !important;
-}
+    }
 
 
-.navbar-nav .active li a {
-    color: red;
-}
+    .navbar-nav .active li a {
+        color: red;
+    }
 
 
-      .link {
-      stroke: #aaa;
-      }
+    .link {
+        stroke: #aaa;
+    }
 
-      .node text {
-      stroke:#333;
-      cursos:pointer;
-      }
+    .node text {
+        stroke: #333;
+        cursos: pointer;
+    }
 
-      .node circle{
-      stroke:#fff;
-      stroke-width:3px;
-      fill:#555;
-      }
-
-
-<<<<<<< HEAD
-=======
-/*.popover {
-      max-width: 400px;
-}*/
-
-.popover{
-    width:200px;
-    height:250px;
-}
-
-.popover.content{
-    width:200px;
-    height:250px;
-}
-
-/*Navbar fix */
-.navbar-form {
-
-}
+    .node circle {
+        stroke: #fff;
+        stroke-width: 3px;
+        fill: #555;
+    }
 
 
-.form-control.searchbar{
-    color: white;
-    background-color:#1a1a1a !important;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
 
-.form-control.searchbar::-webkit-input-placeholder { color: white; }
-.form-control.searchbar:-moz-placeholder { color: white; }
-.form-control.searchbar::-moz-placeholder { color: white; }
-.form-control.searchbar:-ms-input-placeholder { color: white; }
 
-.jumbotron {position:relative;}
-#helper {position:absolute; bottom:5px; right:5px;}
+    .popover {
+        width: 200px;
+        height: 250px;
+    }
 
-/*.jumbotron jumbotron-fluid text-white text-center
+    .popover.content {
+        width: 200px;
+        height: 250px;
+    }
+    /*Navbar fix */
+
+    .navbar-form {}
+
+
+    .form-control.searchbar {
+        color: white;
+        background-color: #1a1a1a !important;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .form-control.searchbar::-webkit-input-placeholder {
+        color: white;
+    }
+
+    .form-control.searchbar:-moz-placeholder {
+        color: white;
+    }
+
+    .form-control.searchbar::-moz-placeholder {
+        color: white;
+    }
+
+    .form-control.searchbar:-ms-input-placeholder {
+        color: white;
+    }
+
+    .jumbotron {
+        position: relative;
+    }
+
+    #helper {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+    }
+    /*.jumbotron jumbotron-fluid text-white text-center
 #log_button {position:absolute; top:5px; right:100px;}*/
->>>>>>> boot_branch
-
 </style>

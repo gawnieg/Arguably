@@ -6,8 +6,8 @@
     "test": "istanbul cover node_modules/jasmine/bin/jasmine.js || :"
   },
   "dependencies": {
-    "body-parser": "*",
     "bcrypt-nodejs": "latest",
+    "body-parser": "*",
     "connect-flash": "~0.1.1",
     "cookie-parser": "~1.0.0",
     "d3": "^4.8.0",
@@ -16,13 +16,12 @@
     "express-session": "~1.0.0",
     "method-override": "~1.0.0",
     "mongoose": "~3.8.1",
-    "morgan": "~1.0.0",
+    "morgan": "*",
+    "neo4j-driver": "*",
+    "nodemon": "^1.11.0",
     "passport": "~0.1.17",
     "passport-local": "~0.1.6",
-    "morgan": "*",
-    "path": "^0.12.7",
-    "neo4j-driver": "*",
-    "nodemon": "^1.11.0"    
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "istanbul": "^0.4.5",
