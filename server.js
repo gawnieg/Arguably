@@ -31,6 +31,8 @@ var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 
+var d3 = require('d3');
+
 
 mongoose.connect(configDB.url); // connect to our databas
 require('./config/passport')(passport);
@@ -110,7 +112,8 @@ const searchUtilities = require('./split/searchUtilities');
 const getSearchResults = searchUtilities.getSearchResults;
 const getSearchArray = searchUtilities.getSearchArray;
 
-
+const graphUtils = require('./split/graphviewUtils');
+const getArgumentText = graphUtils.getArgumentText;
 //log in function
 app.post('/login', passport.authenticate('local-login', {
     successRedirect: '/main', // redirect to the secure profile section
@@ -278,7 +281,7 @@ app.get('/download_all', isLoggedIn, function(req, res) {
     downloadQuery(session)
         .then(function(result) {
             var obj;
-            console.log(result.records.length)
+            //console.log(result.records.length)
             if (result.records.length == 0) {
                 obj = {
                     "records": []
@@ -304,6 +307,7 @@ app.get('/download_all', isLoggedIn, function(req, res) {
 });
 //end of download all ----------------------------------------------
 
+
 //topic specific download buttons
 app.get('/downloadTopic/:name', isLoggedIn, function(req, res) {
 
@@ -314,10 +318,18 @@ app.get('/downloadTopic/:name', isLoggedIn, function(req, res) {
 
     downloadQueryTopic(session, topicName)
         .then(function(result) {
-            getDownloadArray(result, DownloadAllArray, replyArray);
-            var obj = {
-                "records": DownloadAllArray
-            };
+            var obj;
+            //console.log(result.records.length)
+            if (result.records.length == 0) {
+                obj = {
+                    "records": []
+                };
+            } else {
+                getDownloadArray(result, DownloadAllArray, replyArray);
+                obj = {
+                    "records": DownloadAllArray
+                };
+            }
             var json = JSON.stringify(obj, null, 4); //prep the data, this is essential
             var filename = 'data.json';
             var mimetype = 'application/json';
@@ -330,9 +342,42 @@ app.get('/downloadTopic/:name', isLoggedIn, function(req, res) {
         });
 });
 
+
+app.get('/graphview', function(req,res) {
+  var DownloadAllArray = [];
+  var replyArray = [];
+
+  var obj;
+  downloadQuery(session)
+      .then(function(result) {
+
+          //console.log(result.records.length)
+          if (result.records.length == 0) {
+              obj = {
+                  "records": []
+              };
+          } else {
+              getDownloadArray(result, DownloadAllArray, replyArray);
+              obj = {
+                  "records": DownloadAllArray
+              };
+          }
+           var output = getArgumentText(obj);
+           return output;
+        })
+          .then(function(output){
+            console.log("OUTPUT BEFORE RENDEREING IS: " + output.nodes[0]);
+    session.close();
+    res.render('pages/graphview', {output:output});
+
+  }).catch(function(err) {
+      console.log(err);
+  });
+})
+
+
 app.get('/search_results/:name', function(req, res) {
     var searchRequest = decodeURIComponent(req.params.name);
-    console.log(searchRequest);
     getSearchResults(session, searchRequest).then(getSearchArray)
         .then(function(searchArray) {
             res.render('pages/search_results', {

@@ -10,7 +10,7 @@
     "body-parser": "*",
     "connect-flash": "~0.1.1",
     "cookie-parser": "~1.0.0",
-    "d3": "^4.8.0",
+    "d3": "^4.9.1",
     "ejs": "*",
     "express": "*",
     "express-session": "~1.0.0",
