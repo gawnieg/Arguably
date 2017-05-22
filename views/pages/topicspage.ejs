@@ -31,7 +31,7 @@
 
                 <form method = "post" action ="/opinion/addReply">
 
-                  <input class="form-control" type="text" name = "topic" placeholder = "Your reply here.." required>
+                  <input class="form-control" type="text" name = "reply" placeholder = "Your reply here.." required>
                   <input type="hidden" class="topic" name="Topic" value = <%= encodeURIComponent(which_topic)%> />
                   <input type="hidden" class="initialArg" name="initialArg"
         		 value = <%= encodeURIComponent(topic.argumenttext) %> />
